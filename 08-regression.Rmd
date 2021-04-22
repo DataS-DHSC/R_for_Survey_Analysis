@@ -1,0 +1,142 @@
+# Regression model 
+
+
+##  Simple linear regression 
+
+The basic regression, i.e. linear model (lm), formula in R is: 
+lm(formula = y ~ x, data = data_frame_name).
+
+
+
+Let's run a basic model to model BMI as a function of the Poverty indicator:
+```{r}
+# call model
+lm(BMI ~ Poverty, data = nhanes)
+```
+
+Always save the model object - it allows you to access more of the outputs that are produced automatically when running the regression.
+If you only need the coefficients, call the 'coef' function
+```{r}
+
+model_bmi_pov <- lm(BMI ~ Poverty, data = nhanes)
+
+coef(model_bmi_pov)
+
+```
+
+
+Call the 'summary' function on the model to see not only coefficients, but also the R-squared value, the associated standard error and p-value for each coefficient, the adjusted and the residual standard error. 
+```{r}
+
+summary(model_bmi_pov)
+```
+
+Inspecting model outputs: Once we have run a model, we often want to explore the fitted values and residuals (remember mean of resid = 0 and mean of fitted values = mean of actual y data). They are stored as part of the model object an can easily be accessed individually:
+```{r}
+#resid
+residuals(model_bmi_pov)[1:5]
+# fitted values
+fitted.values(model_bmi_pov)[1:5]
+
+```
+
+Explore all that is saved with your model
+To have a look at all the different aspects that are saved as part of your model, scroll down to 'Value' section for list of all things part of your model:
+```{r}
+
+?lm() 
+```
+
+
+
+## Multiple linear regression 
+
+Bulding on the simple linear regression formula, the mulitple linear regression follows suit:
+lm(formula = y ~ x1 + x2 + x3..., data = data_frame_name)
+
+```{r}
+# 1. save model - allows you to access more of the outputs
+model_mult <- lm(BMI ~ Poverty + PhysActiveDays + SleepHrsNight + Diabetes + SmokeNow + Gender, data = adults)
+
+# 2. if you only need the coefficients, call the 'coef' function
+coef(model_mult)
+
+```
+
+```{r}
+
+# 3. Or call 'summary' for a complete output
+summary(model_mult)
+
+```
+
+## Lunch Break
+
+Try to answer the following questions drawing on what you have learned about creating tables, plots and regression analysis.
+
+1. Is the age in months variable actually the age in months, or just derived from age in years?
+
+2. How is age related to sleep?
+
+3. Which of these variables is most strongly associated with BMI in adults: age, poverty, or number of hours sleep? 
+3.b And how much of the variance in BMI can be explained through these variables?
+
+If you'd like to go a bit further: Explore the dataset that we have provided to you and see if you can find variables that you are interested in. Try making a histogram, boxplot, scatter plot.
+Next pick a continuous variable that could contribute to overall reported XXX and run a linear model.
+Then plot the model (i.e. a scatter plot and a line of best fit). Also report how much of the variance in XXX is explained through your predictor variable.
+
+
+## ggplot cheat sheet reminder:
+
+If you're lost or want to explore more options for plotting charts, you can consult a ggplot cheat sheet, e.g. https://www.rstudio.com/wp-content/uploads/2016/11/ggplot2-cheatsheet-2.1.pdf
+
+
+
+## Regression output inspection (cont.)
+
+In the 'tidy' universe of R there are a few functions that make your life easier & prettier (after a steeper learning curve).
+In the broom package there are a few helpful functions that give you objects that you can not only read, but transform or save as neat csv files.
+
+The 'tidy' function gives you a data frame of the coefficients (& confidence intervals if you so choose) at the confidence level of your liking.
+```{r}
+# 1. save model - allows you to access all model outputs
+model_mult <- lm(BMI ~ Poverty + PhysActiveDays + SleepHrsNight + Diabetes + SmokeNow + Gender, data = adults)
+
+# 2. Create tidy output
+broom::tidy(model_mult, conf.int = FALSE, 
+            conf.level = 0.95)
+
+```
+
+The 'glance' function gives you the model-level metrics:
+
+```{r}
+
+# Create tidy output
+broom::glance(model_mult)
+
+```
+
+Now we can save the 'tidy' output to easily further manipulate it or save it as a csv file.
+
+```{r}
+
+# Store tidy regression model output as object in R
+model_mult_tidy <- broom::tidy(model_mult, conf.int = FALSE, 
+                                  conf.level = 0.95)
+
+```
+
+```{r}
+# Save as a csv file at your chosen location (in "outputs" folder) and name in a meaningful way (e.g. BMI_model_output_p0.05.csv)
+
+readr::write_csv(model_mult_tidy, file = "./outputs/BMI_model_output_p0.05.csv")
+```
+
+
+
+### Try this for yourselves
+
+Using either your last regression model from the lunch break or a new one, play around with the broom package and try writing the outputs that you are interested in. Try including and excluding the confidence intervals and using different significance levels.
+
+

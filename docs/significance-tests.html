@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 10 Significance tests | Intermediate R - R for Survey Analysis</title>
+  <meta name="description" content="Course notes for the Intermediate R course run internally at DHSC." />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 10 Significance tests | Intermediate R - R for Survey Analysis" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="Course notes for the Intermediate R course run internally at DHSC." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 10 Significance tests | Intermediate R - R for Survey Analysis" />
+  
+  <meta name="twitter:description" content="Course notes for the Intermediate R course run internally at DHSC." />
+  
+
+<meta name="author" content="DHSC Analysts" />
+
+
+<meta name="date" content="2021-04-22" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="regression-model.html"/>
+<link rel="next" href="testing-regression-assumptions.html"/>
+<script src="libs/jquery-3.5.1/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+<script src="libs/htmlwidgets-1.5.3/htmlwidgets.js"></script>
+<link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+<script src="libs/datatables-binding-0.18/datatables.js"></script>
+<link href="libs/dt-core-1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="libs/dt-core-1.10.20/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="libs/dt-core-1.10.20/js/jquery.dataTables.min.js"></script>
+<link href="libs/crosstalk-1.1.1/css/crosstalk.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.1.1/js/crosstalk.min.js"></script>
+
+
+<style type="text/css">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">R for Survey Analysis</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Index</a><ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#disclaimer"><i class="fa fa-check"></i><b>1.1</b> Disclaimer</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>2</b> Introduction</a><ul>
+<li class="chapter" data-level="2.1" data-path="introduction.html"><a href="introduction.html#aims"><i class="fa fa-check"></i><b>2.1</b> Aims</a><ul>
+<li class="chapter" data-level="2.1.1" data-path="introduction.html"><a href="introduction.html#day-1"><i class="fa fa-check"></i><b>2.1.1</b> Day 1</a></li>
+<li class="chapter" data-level="2.1.2" data-path="introduction.html"><a href="introduction.html#day-2"><i class="fa fa-check"></i><b>2.1.2</b> Day 2</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="introduction.html"><a href="introduction.html#why-r"><i class="fa fa-check"></i><b>2.2</b> Why R</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="day-1-1.html"><a href="day-1-1.html"><i class="fa fa-check"></i><b>3</b> Day 1</a><ul>
+<li class="chapter" data-level="3.1" data-path="day-1-1.html"><a href="day-1-1.html#outline-for-day-1"><i class="fa fa-check"></i><b>3.1</b> Outline for Day 1</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="loading-survey-data.html"><a href="loading-survey-data.html"><i class="fa fa-check"></i><b>4</b> Loading Survey Data</a><ul>
+<li class="chapter" data-level="4.1" data-path="loading-survey-data.html"><a href="loading-survey-data.html#analysing-a-survey-in-r"><i class="fa fa-check"></i><b>4.1</b> Analysing a survey in R</a></li>
+<li class="chapter" data-level="4.2" data-path="loading-survey-data.html"><a href="loading-survey-data.html#loading-the-data"><i class="fa fa-check"></i><b>4.2</b> Loading the data</a></li>
+<li class="chapter" data-level="4.3" data-path="loading-survey-data.html"><a href="loading-survey-data.html#cleaning-the-data"><i class="fa fa-check"></i><b>4.3</b> Cleaning the data</a></li>
+<li class="chapter" data-level="4.4" data-path="loading-survey-data.html"><a href="loading-survey-data.html#exploring-the-data"><i class="fa fa-check"></i><b>4.4</b> Exploring the data</a></li>
+<li class="chapter" data-level="4.5" data-path="loading-survey-data.html"><a href="loading-survey-data.html#applying-survey-weighting-for-exploratory-stats"><i class="fa fa-check"></i><b>4.5</b> Applying survey weighting for exploratory stats</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="crosstabs.html"><a href="crosstabs.html"><i class="fa fa-check"></i><b>5</b> Crosstabs</a><ul>
+<li class="chapter" data-level="5.1" data-path="crosstabs.html"><a href="crosstabs.html#case-1-with-survey-weights"><i class="fa fa-check"></i><b>5.1</b> Case 1: with survey weights</a></li>
+<li class="chapter" data-level="5.2" data-path="crosstabs.html"><a href="crosstabs.html#case-2-without-survey-weights"><i class="fa fa-check"></i><b>5.2</b> Case 2: Without survey weights</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="day-2-1.html"><a href="day-2-1.html"><i class="fa fa-check"></i><b>6</b> Day 2</a><ul>
+<li class="chapter" data-level="6.1" data-path="day-2-1.html"><a href="day-2-1.html#outline-for-day-2"><i class="fa fa-check"></i><b>6.1</b> Outline for Day 2</a><ul>
+<li class="chapter" data-level="6.1.1" data-path="day-2-1.html"><a href="day-2-1.html#take-home-messages-to-start-with"><i class="fa fa-check"></i><b>6.1.1</b> Take home messages to start with</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="plotting-basic-charts-base-r.html"><a href="plotting-basic-charts-base-r.html"><i class="fa fa-check"></i><b>7</b> Plotting basic charts (base R)</a><ul>
+<li class="chapter" data-level="7.1" data-path="plotting-basic-charts-base-r.html"><a href="plotting-basic-charts-base-r.html#histograms---basic-frequencies"><i class="fa fa-check"></i><b>7.1</b> histograms - basic frequencies</a></li>
+<li class="chapter" data-level="7.2" data-path="plotting-basic-charts-base-r.html"><a href="plotting-basic-charts-base-r.html#bar-charts---plotting-stats-across-categories"><i class="fa fa-check"></i><b>7.2</b> bar charts - plotting stats across categories</a></li>
+<li class="chapter" data-level="7.3" data-path="plotting-basic-charts-base-r.html"><a href="plotting-basic-charts-base-r.html#box-plots---plotting-distribution-of-several-categoriesvars"><i class="fa fa-check"></i><b>7.3</b> Box plots - plotting distribution of several categories/vars</a></li>
+<li class="chapter" data-level="7.4" data-path="plotting-basic-charts-base-r.html"><a href="plotting-basic-charts-base-r.html#scatter-plots---relationship-between-two-continuous-vars"><i class="fa fa-check"></i><b>7.4</b> Scatter plots - relationship between two continuous vars</a></li>
+<li class="chapter" data-level="7.5" data-path="plotting-basic-charts-base-r.html"><a href="plotting-basic-charts-base-r.html#tiny-statistics-excursion"><i class="fa fa-check"></i><b>7.5</b> Tiny statistics excursion</a></li>
+<li class="chapter" data-level="7.6" data-path="plotting-basic-charts-base-r.html"><a href="plotting-basic-charts-base-r.html#are-there-any-other-plots-that-you-regularly-use"><i class="fa fa-check"></i><b>7.6</b> <em>Are there any other plots that you regularly use? </em></a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="intermediate-plotting-in-r-ggplot2.html"><a href="intermediate-plotting-in-r-ggplot2.html"><i class="fa fa-check"></i><b>8</b> Intermediate plotting in R (GGPLOT2)</a><ul>
+<li class="chapter" data-level="8.1" data-path="intermediate-plotting-in-r-ggplot2.html"><a href="intermediate-plotting-in-r-ggplot2.html#adding-transparency"><i class="fa fa-check"></i><b>8.1</b> Adding transparency</a></li>
+<li class="chapter" data-level="8.2" data-path="intermediate-plotting-in-r-ggplot2.html"><a href="intermediate-plotting-in-r-ggplot2.html#adding-automatic-line-of-best-fit"><i class="fa fa-check"></i><b>8.2</b> Adding automatic line of best fit</a></li>
+<li class="chapter" data-level="8.3" data-path="intermediate-plotting-in-r-ggplot2.html"><a href="intermediate-plotting-in-r-ggplot2.html#adding-colours"><i class="fa fa-check"></i><b>8.3</b> Adding colours</a></li>
+<li class="chapter" data-level="8.4" data-path="intermediate-plotting-in-r-ggplot2.html"><a href="intermediate-plotting-in-r-ggplot2.html#fitting-a-line-of-best-fit-for-each-group-of-a-categorical-variable"><i class="fa fa-check"></i><b>8.4</b> Fitting a line of best fit for each group of a categorical variable</a></li>
+<li class="chapter" data-level="8.5" data-path="intermediate-plotting-in-r-ggplot2.html"><a href="intermediate-plotting-in-r-ggplot2.html#exercise-brief-in-class-practice-of-making-charts"><i class="fa fa-check"></i><b>8.5</b> Exercise: Brief in-class practice of making charts</a></li>
+<li class="chapter" data-level="8.6" data-path="intermediate-plotting-in-r-ggplot2.html"><a href="intermediate-plotting-in-r-ggplot2.html#ggplot-cheat-sheet"><i class="fa fa-check"></i><b>8.6</b> ggplot cheat sheet</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="regression-model.html"><a href="regression-model.html"><i class="fa fa-check"></i><b>9</b> Regression model</a><ul>
+<li class="chapter" data-level="9.1" data-path="regression-model.html"><a href="regression-model.html#simple-linear-regression"><i class="fa fa-check"></i><b>9.1</b> Simple linear regression</a></li>
+<li class="chapter" data-level="9.2" data-path="regression-model.html"><a href="regression-model.html#multiple-linear-regression"><i class="fa fa-check"></i><b>9.2</b> Multiple linear regression</a></li>
+<li class="chapter" data-level="9.3" data-path="regression-model.html"><a href="regression-model.html#lunch-break"><i class="fa fa-check"></i><b>9.3</b> Lunch Break</a></li>
+<li class="chapter" data-level="9.4" data-path="regression-model.html"><a href="regression-model.html#ggplot-cheat-sheet-reminder"><i class="fa fa-check"></i><b>9.4</b> ggplot cheat sheet reminder:</a></li>
+<li class="chapter" data-level="9.5" data-path="regression-model.html"><a href="regression-model.html#regression-output-inspection-cont."><i class="fa fa-check"></i><b>9.5</b> Regression output inspection (cont.)</a><ul>
+<li class="chapter" data-level="9.5.1" data-path="regression-model.html"><a href="regression-model.html#try-this-for-yourselves"><i class="fa fa-check"></i><b>9.5.1</b> Try this for yourselves</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="significance-tests.html"><a href="significance-tests.html"><i class="fa fa-check"></i><b>10</b> Significance tests</a><ul>
+<li class="chapter" data-level="10.1" data-path="significance-tests.html"><a href="significance-tests.html#chi-square"><i class="fa fa-check"></i><b>10.1</b> Chi-square</a></li>
+<li class="chapter" data-level="10.2" data-path="significance-tests.html"><a href="significance-tests.html#t-test"><i class="fa fa-check"></i><b>10.2</b> T-test</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="testing-regression-assumptions.html"><a href="testing-regression-assumptions.html"><i class="fa fa-check"></i><b>11</b> Testing regression assumptions</a><ul>
+<li class="chapter" data-level="11.1" data-path="testing-regression-assumptions.html"><a href="testing-regression-assumptions.html#linear-relationship"><i class="fa fa-check"></i><b>11.1</b> Linear relationship</a></li>
+<li class="chapter" data-level="11.2" data-path="testing-regression-assumptions.html"><a href="testing-regression-assumptions.html#normality-of-residuals"><i class="fa fa-check"></i><b>11.2</b> normality of residuals</a></li>
+<li class="chapter" data-level="11.3" data-path="testing-regression-assumptions.html"><a href="testing-regression-assumptions.html#testing-the-homoscedasticity-assumption"><i class="fa fa-check"></i><b>11.3</b> Testing the Homoscedasticity Assumption</a></li>
+<li class="chapter" data-level="11.4" data-path="testing-regression-assumptions.html"><a href="testing-regression-assumptions.html#test-for-autocorrelation-violations-of-independence"><i class="fa fa-check"></i><b>11.4</b> Test for autocorrelation (Violations of independence)</a></li>
+<li class="chapter" data-level="11.5" data-path="testing-regression-assumptions.html"><a href="testing-regression-assumptions.html#collinearity"><i class="fa fa-check"></i><b>11.5</b> Collinearity</a></li>
+<li class="chapter" data-level="11.6" data-path="testing-regression-assumptions.html"><a href="testing-regression-assumptions.html#multicollinearity"><i class="fa fa-check"></i><b>11.6</b> Multicollinearity</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="homework-questions.html"><a href="homework-questions.html"><i class="fa fa-check"></i><b>12</b> ‘Homework’ questions</a></li>
+<li class="chapter" data-level="13" data-path="survey-specific-functions.html"><a href="survey-specific-functions.html"><i class="fa fa-check"></i><b>13</b> 9. Survey specific functions</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Intermediate R - R for Survey Analysis</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="significance-tests" class="section level1">
+<h1><span class="header-section-number">Chapter 10</span> Significance tests</h1>
+<div id="chi-square" class="section level2">
+<h2><span class="header-section-number">10.1</span> Chi-square</h2>
+<p>Chi-square test for categorical variables determines whether there is a difference in the population proportions between two or more groups</p>
+<p>Let’s look at smoking for men vs. women</p>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="significance-tests.html#cb65-1"></a>contingency_table_gender &lt;-<span class="st"> </span><span class="kw">table</span>(adults<span class="op">$</span>Gender,</span>
+<span id="cb65-2"><a href="significance-tests.html#cb65-2"></a>                           adults<span class="op">$</span>SmokeNow)</span>
+<span id="cb65-3"><a href="significance-tests.html#cb65-3"></a></span>
+<span id="cb65-4"><a href="significance-tests.html#cb65-4"></a>contingency_table_gender</span></code></pre></div>
+<pre><code>##         
+##            No  Yes
+##   female 1116 1032
+##   male   1663 1422</code></pre>
+<p>Or the ‘dplyr way’:</p>
+<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="significance-tests.html#cb67-1"></a>adults <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb67-2"><a href="significance-tests.html#cb67-2"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(SmokeNow)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb67-3"><a href="significance-tests.html#cb67-3"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">group_by</span>(Gender, SmokeNow) <span class="op">%&gt;%</span></span>
+<span id="cb67-4"><a href="significance-tests.html#cb67-4"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">summarise</span>(<span class="dt">n =</span> <span class="kw">n</span>()) <span class="op">%&gt;%</span></span>
+<span id="cb67-5"><a href="significance-tests.html#cb67-5"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">freq =</span> n <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(n))</span></code></pre></div>
+<pre><code>## `summarise()` has grouped output by &#39;Gender&#39;. You can override using the `.groups` argument.</code></pre>
+<pre><code>## # A tibble: 4 x 4
+## # Groups:   Gender [2]
+##   Gender SmokeNow     n  freq
+##   &lt;fct&gt;  &lt;fct&gt;    &lt;int&gt; &lt;dbl&gt;
+## 1 female No        1116 0.520
+## 2 female Yes       1032 0.480
+## 3 male   No        1663 0.539
+## 4 male   Yes       1422 0.461</code></pre>
+<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb70-1"><a href="significance-tests.html#cb70-1"></a><span class="kw">chisq.test</span>(adults<span class="op">$</span>SmokeNow, adults<span class="op">$</span>Gender)</span></code></pre></div>
+<pre><code>## 
+##  Pearson&#39;s Chi-squared test with Yates&#39; continuity
+##  correction
+## 
+## data:  adults$SmokeNow and adults$Gender
+## X-squared = 1.8573, df = 1, p-value = 0.1729</code></pre>
+</div>
+<div id="t-test" class="section level2">
+<h2><span class="header-section-number">10.2</span> T-test</h2>
+<p>You can specify whether you need it to be one-sided / two-sided &amp; one-sample / independent-sample.</p>
+<p>Let’s look at whether BMI differs between men and women:</p>
+<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb72-1"><a href="significance-tests.html#cb72-1"></a><span class="kw">hist</span>(adults<span class="op">$</span>BMI[adults<span class="op">$</span>Gender<span class="op">==</span><span class="st">&quot;female&quot;</span>])</span></code></pre></div>
+<p><img src="Intermediate_R_-_R_for_Survey_Analysis_files/figure-html/unnamed-chunk-45-1.png" width="672" /></p>
+<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb73-1"><a href="significance-tests.html#cb73-1"></a><span class="kw">hist</span>(adults<span class="op">$</span>BMI[adults<span class="op">$</span>Gender<span class="op">==</span><span class="st">&quot;male&quot;</span>])</span></code></pre></div>
+<p><img src="Intermediate_R_-_R_for_Survey_Analysis_files/figure-html/unnamed-chunk-45-2.png" width="672" />
+Or let’s do it the ggplot2 way</p>
+<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb74-1"><a href="significance-tests.html#cb74-1"></a><span class="co"># Define default colour scale suitable for colour-blind users</span></span>
+<span id="cb74-2"><a href="significance-tests.html#cb74-2"></a></span>
+<span id="cb74-3"><a href="significance-tests.html#cb74-3"></a>scale_colour_discrete &lt;-<span class="st"> </span>ggthemes<span class="op">::</span>scale_color_colorblind</span></code></pre></div>
+<div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb75-1"><a href="significance-tests.html#cb75-1"></a><span class="co"># Create plot facetted by Gender</span></span>
+<span id="cb75-2"><a href="significance-tests.html#cb75-2"></a><span class="kw">ggplot</span>(adults, <span class="kw">aes</span>(BMI, <span class="dt">fill =</span> Gender)) <span class="op">+</span></span>
+<span id="cb75-3"><a href="significance-tests.html#cb75-3"></a><span class="st">  </span><span class="kw">geom_histogram</span>() <span class="op">+</span></span>
+<span id="cb75-4"><a href="significance-tests.html#cb75-4"></a><span class="st">  </span><span class="kw">facet_wrap</span>(.<span class="op">~</span>Gender)</span></code></pre></div>
+<pre><code>## Warning: Removed 580 rows containing non-finite values (stat_bin).</code></pre>
+<p><img src="Intermediate_R_-_R_for_Survey_Analysis_files/figure-html/unnamed-chunk-47-1.png" width="672" /></p>
+<p>Any guesses on whether there is a significant difference?
+Now it’s time to do the test.</p>
+<div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb77-1"><a href="significance-tests.html#cb77-1"></a><span class="kw">t.test</span>(<span class="dt">x =</span> adults<span class="op">$</span>BMI[adults<span class="op">$</span>Gender <span class="op">==</span><span class="st"> &quot;female&quot;</span>],</span>
+<span id="cb77-2"><a href="significance-tests.html#cb77-2"></a>       <span class="dt">y =</span> adults<span class="op">$</span>BMI[adults<span class="op">$</span>Gender <span class="op">==</span><span class="st"> &quot;male&quot;</span>],</span>
+<span id="cb77-3"><a href="significance-tests.html#cb77-3"></a>       <span class="dt">alternative =</span> <span class="st">&quot;two.sided&quot;</span>, <span class="co"># could also be &#39;less&#39; or &#39;greater&#39; for one-sided test</span></span>
+<span id="cb77-4"><a href="significance-tests.html#cb77-4"></a>       <span class="dt">paired =</span> <span class="ot">FALSE</span>) </span></code></pre></div>
+<pre><code>## 
+##  Welch Two Sample t-test
+## 
+## data:  adults$BMI[adults$Gender == &quot;female&quot;] and adults$BMI[adults$Gender == &quot;male&quot;]
+## t = 7.1026, df = 11386, p-value = 1.297e-12
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  0.6484638 1.1428217
+## sample estimates:
+## mean of x mean of y 
+##  29.26902  28.37338</code></pre>
+<p>Yes, on average women seem to have a higher BMI in this survey.</p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="regression-model.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="testing-regression-assumptions.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["Intermediate_R_-_R_for_Survey_Analysis.pdf", "Intermediate_R_-_R_for_Survey_Analysis.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,120 @@
+
+# 'Homework' questions
+
+The code for sample solutions is given in the file Homework_solutions_day2 file.
+Please try to answer the following questions:
+
+1. Has the relationship between height and weight changed between the survey years?
+
+2. Is there a significant difference in how many rooms individuals' accommodation has, between those who own and those who rent their accommodation?
+
+3. How are trouble sleeping and depression (both categorical) related?
+
+
+# 9. Survey specific functions
+
+As we showed you yesterday if we are using survey data that comes with weights, we need to account for those.
+
+The 'survey' package has adapted functions for the different things that we did today.
+Let's first create the weights for the data at hand, specify the sample design and store it in an R object that we can then call in our tests.
+
+```{r survey weights}
+# add weighting variable
+nhanes <- nhanes %>% dplyr::mutate(WTMEC4YR = 0.5 * WTMEC2YR)
+
+# Create weighted R data object that holds the information about the sampling specifications
+nhanes_design <- survey::svydesign(data = nhanes, 
+                              strata = ~SDMVSTRA, 
+                              id = ~SDMVPSU, 
+                              nest = TRUE, 
+                              weights = ~WTMEC4YR)
+
+```
+
+Now we can seemlessly work with the weighted data. Let's create a frequency table that accounts for sample weights.
+```{r survey table}
+
+table_gender_smoke_w <- survey::svytable(~Gender + SmokeNow, design = nhanes_design) # contains estimated frequencies based on survey weights
+
+table_gender_smoke_w
+
+```
+
+For reference, there is some sample code for the other main analyses using the survey package.
+
+
+#### Survey-weighted histogram
+
+```{r}
+# BMI
+ggplot(data = nhanes,
+       mapping = aes(BMI, weight = WTMEC4YR)) + 
+	geom_histogram(binwidth = 2,
+                   color = "white") +
+	labs(x = "BMI")
+
+```
+
+#### Survey-weighted bar plot 
+
+Bar plot of SleepHrsNight by gender
+
+```{r}
+
+# Compute the survey-weighted mean by Gender
+Sleep_mean_gender <- survey::svyby(formula = ~SleepHrsNight, 
+             by = ~Gender, 
+             design = nhanes_design, 
+             FUN = svymean, 
+             na.rm = TRUE, 
+             keep.names = FALSE)
+             
+# Construct a bar plot of average SleepHrsNight by gender
+ggplot(data = Sleep_mean_gender, mapping = aes(x = Gender, y = SleepHrsNight)) +
+  geom_col() + 
+  labs("Average Hours of Sleep")
+
+```
+
+#### Survey-weighted Chi2 test
+
+Next, let's conduct a Chi2 test with survey weights
+
+```{r survey Chisq}
+survey::svychisq(~Gender + SmokeNow, 
+         design = nhanes_design,
+         statistic = "Chisq")
+```
+
+#### Survey-weighted t-test
+
+```{r}
+# do mean sleeping hours differ between men and women
+svyttest(formula = SleepHrsNight~Gender,
+       design = nhanes_design)
+```
+```{r}
+# Let's get the mean values printed out (created in step prior to t-test) to aid interpretation of the t-test
+Sleep_mean_gender
+```
+#### Survey-weighted scatter plot
+
+Let's look at the relationship between height and weight in 8 year old children.
+You can set the transparency parameter alpha to be the sample weight (WTMEC4YR). Observations with a bigger weight will show as darker points.
+
+```{r}
+ggplot(data = nhanes %>% filter(Age == 8),
+       mapping = aes(x = Height, y = Weight, alpha = WTMEC4YR)) + 
+    geom_point() + 
+    guides(alpha = FALSE)
+```
+
+#### Survey-weighted regression
+
+Let's model Weight based on Height for 8 year olds
+```{r}
+model <- svyglm(Weight ~ Height, data = nhanes %>% filter(Age == 8),
+                design = nhanes_design)
+
+summary(model)
+```

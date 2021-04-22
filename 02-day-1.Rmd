@@ -1,0 +1,11 @@
+# Day 1
+
+## Outline for Day 1
+
+We will cover:
+
+- Loading survey data.
+- Cleaning the data.
+- Exploring the data.
+- Applying survey weightings.
+- Cross tabs.

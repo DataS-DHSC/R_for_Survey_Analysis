@@ -1,0 +1,18 @@
+--- 
+title: "Intermediate R - R for Survey Analysis"
+author: "DHSC Analysts"
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+documentclass: book
+description: "Course notes for the Intermediate R course run internally at DHSC."
+---
+
+# Index
+
+This is a _living document_ of the course notes for our training that follows from Intro to R for people familiar with SAS/SPSS who would like to analyse survey data in R. 
+
+Available to all under the [Open Government Licence](http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/).
+
+## Disclaimer
+
+This is an unapproved draft and does not represent the views of the DHSC.

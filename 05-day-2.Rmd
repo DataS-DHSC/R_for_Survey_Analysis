@@ -1,0 +1,71 @@
+# Day 2
+
+## Outline for Day 2
+
+Disclaimer:
+The focus of the training is not on understanding the statistical concepts, but rather on how to implement common tasks in R - with a few stats sprinkles.
+I'm trying to show you the quick & basic way of doing this and give you an idea of the fancier approaches - which gives you more flexibility (but also has a steeper learning curve).
+You can of course dive deeper on those topics or request follow-up training. :)
+
+
+Today we will cover the following topics:
+
+* plotting (base R, ggplot2)
+* regression models
+* testing regression assumptions
+* significance tests (chi2, t-test)
+
+### Take home messages to start with 
+
+1. Work on a copy of your data in R - do not touch the raw data
+2. Work in R projects 
+3. Structure your code with sections (Ctr shift R)
+4. help(x) or "?x" is your friend when trying to understand function x... scroll down to "Examples" in the helper window that pops up
+
+
+```{r}
+# load all required packages
+pacman::p_load(dplyr, readr, ggplot2, corrplot, NHANES, survey, broom, lmtest, car)
+```
+
+```{r, echo=FALSE, message= FALSE}
+# loading it all in one go as above is very neat - here you can see how you'd 
+# usually call individual packages and what each is used for in this course:
+
+library(dplyr) # for useful functions and code syntax (e.g. %>% pipes)
+library(readr) # for easy reading in of data and saving data in formats such as csv (also tsv or rds)
+library(ggplot2) # for more intermediate / advanced plotting
+library(corrplot) # for plotting a correlation matrix very easily
+library(NHANES) # for easily getting the data
+library(survey) # for using survey weights and using versions of functions that allow for survey weights
+library(broom) # for tidying up model outputs
+library(lmtest) # for heteroscedasticity tests
+library(car) # for variance inflation factor function (for multicollinearity)
+```
+
+
+```{r, echo=FALSE}
+# load data
+nhanes <- NHANES::NHANESraw
+
+```
+
+```{r}
+# inspect data
+head(nhanes)
+
+```
+
+```{r}
+dplyr::glimpse(nhanes) # if there are many columns (from dplyr package)
+```
+
+```{r}
+# get a feeling for variables
+# categorical
+levels(nhanes$Depressed)
+table(nhanes$Depressed,  useNA = "ifany")
+# numerical
+summary(nhanes$BMI, useNA = "ifany")
+
+```

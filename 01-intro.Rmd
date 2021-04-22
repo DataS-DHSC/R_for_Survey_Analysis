@@ -1,0 +1,31 @@
+
+# Introduction
+
+Course Notes for Intermediate R - R for Survey Analysis.
+
+## Aims
+
+
+![Visualisation of the data processing workflow](img/datasci.svg)
+
+### Day 1
+
+- Load SAS/SPSS data in R.
+- Clean the data.
+- Exploring the data with summary stats.
+- Applying survey weightings.
+- Cross tabs.
+
+### Day 2
+
+- Plotting survey data.
+- Regression & plotting.
+- Testing regression assumptions and hypothesis testing.
+
+## Why R
+
+(You're here so hopefully you've been persuaded.)
+
+- No licensing issues. More than 8 people can use it at once.
+- Robustness - I can share the course notes and know it runs the same on your computer. Point-and-click SAS/SPSS has failed some scientific papers. 
+- Reuse - when solving the same problem you can copy-paste existing code.

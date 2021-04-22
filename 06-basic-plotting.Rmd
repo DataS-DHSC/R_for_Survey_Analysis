@@ -1,0 +1,93 @@
+
+# Plotting basic charts (base R) 
+
+It is important to distinguish between exploratory graphs and explanatory graphs:
+* Exploratory is done as part of analysis and there is no need to be pretty
+* Explanatory graphs are done once we understand the data and want to get insights across (for sharing with others)
+
+## histograms - basic frequencies
+```{r}
+# basic frequencies for numerical variables
+hist(nhanes$Height)
+hist(nhanes$Age) 
+hist(nhanes$Age[nhanes$Age<10]) # they sampled for both 0-6months and 6-12months
+
+```
+
+## bar charts - plotting stats across categories
+```{r}
+
+# Great for plotting a statistic (e.g. mean value) for categorical data
+# Get dataframe into right format
+aggregates_by_health <- nhanes %>% dplyr::group_by(HealthGen) %>% 
+  dplyr::summarise(count = n(),
+            mean_weight = round(mean(Weight, na.rm=T),1),
+            mean_age = round(mean(Age, na.rm=T),1))
+
+# create bar plot to plot either Frequencies or aggregate statistics
+# Participant numbers by race
+barplot(count ~ HealthGen, data = aggregates_by_health)
+# average weight and age by race
+barplot(mean_weight ~ HealthGen, data = aggregates_by_health)
+
+
+```
+
+## Box plots - plotting distribution of several categories/vars
+```{r}
+
+# Good for distribution of continuous data across categories
+boxplot(nhanes$Age ~ HealthGen, data = nhanes )
+
+```
+
+## Scatter plots - relationship between two continuous vars 
+```{r}
+
+# Let's keep only adults in for this
+adults <- nhanes %>% dplyr::filter(Age >= 18)
+
+# plot scatter plot
+plot(x = adults$Height, y = adults$Weight)
+
+```
+
+Can you guess the Correlation coefficient?
+What's the value of the correlation coefficient?"
+```{r}
+cor(adults$Height, adults$Weight, use = "pairwise.complete.obs")
+```
+
+Now let's add the line of best fit.
+First, we calculate slope and intercept of line of best fit
+
+```{r}
+coef(lm(Weight ~ Height, data = adults))
+```
+
+
+Then we can add them to the plot
+```{r}
+# add them to plot (run both commands)
+plot(x = adults$Height, y = adults$Weight)
+# intercept and slope
+abline(-72.209450 , 0.915329)
+```
+
+## Tiny statistics excursion
+What's the relationship between the linear model regression coefficient and the correlation coefficient?
+
+
+```{r}
+
+hnorm <- adults$Height/sd(adults$Height, na.rm = TRUE)
+wnorm <- adults$Weight/sd(adults$Weight, na.rm = TRUE)
+df_norm <- as.data.frame(cbind(hnorm,wnorm))
+
+coef(lm(hnorm ~ wnorm, data = df_norm)) 
+
+```
+Note: For correlation coef, the larger the value, the stronger the (linear!) relationship.
+For regression coefficients, a larger slope coefficient does NOT imply that the association between variables is stronger (remember the unit dependency).
+
+## *Are there any other plots that you regularly use? *
