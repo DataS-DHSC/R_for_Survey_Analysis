@@ -1,0 +1,67 @@
+
+# Significance tests
+
+## Chi-square 
+Chi-square test for categorical variables determines whether there is a difference in the population proportions between two or more groups
+
+Let's look at smoking for men vs. women
+
+```{r}
+contingency_table_gender <- table(adults$Gender,
+                           adults$SmokeNow)
+
+contingency_table_gender
+
+```
+
+Or the 'dplyr way':
+
+```{r}
+adults %>% 
+  dplyr::filter(!is.na(SmokeNow)) %>% 
+  dplyr::group_by(Gender, SmokeNow) %>%
+  dplyr::summarise(n = n()) %>%
+  dplyr::mutate(freq = n / sum(n))
+```
+
+```{r}
+chisq.test(adults$SmokeNow, adults$Gender)
+```
+
+## T-test 
+
+You can specify whether you need it to be one-sided / two-sided & one-sample / independent-sample.
+
+Let's look at whether BMI differs between men and women:
+
+```{r}
+
+hist(adults$BMI[adults$Gender=="female"])
+hist(adults$BMI[adults$Gender=="male"])
+
+```
+Or let's do it the ggplot2 way
+
+
+```{r}
+# Define default colour scale suitable for colour-blind users
+
+scale_colour_discrete <- ggthemes::scale_color_colorblind
+```
+
+```{r, message=FALSE}
+# Create plot facetted by Gender
+ggplot(adults, aes(BMI, fill = Gender)) +
+  geom_histogram() +
+  facet_wrap(.~Gender)
+```
+
+Any guesses on whether there is a significant difference?
+Now it's time to do the test.
+```{r}
+t.test(x = adults$BMI[adults$Gender == "female"],
+       y = adults$BMI[adults$Gender == "male"],
+       alternative = "two.sided", # could also be 'less' or 'greater' for one-sided test
+       paired = FALSE) 
+```
+Yes, on average women seem to have a higher BMI in this survey.

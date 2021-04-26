@@ -1,6 +1,5 @@
-book_filename: "Intermediate_R_-_R_for_Survey_Analysis"
+book_filename: "Intermediate R - R for Survey Analysis"
 delete_merged_file: true
 language:
   ui:
     chapter_name: "Chapter "
-output_dir: "docs"

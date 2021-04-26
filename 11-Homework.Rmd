@@ -10,10 +10,18 @@ Please try to answer the following questions:
 
 3. How are trouble sleeping and depression (both categorical) related?
 
+## Training evaluation
 
-# 9. Survey specific functions
+Please fill in this survey before you leave the call:
 
-As we showed you yesterday if we are using survey data that comes with weights, we need to account for those.
+https://forms.gle/J4Yt64C1FAncFFjW6
+
+
+
+
+# Extra: Survey specific functions
+
+As James showed you yesterday if we are using survey data that comes with weights, we need to account for those.
 
 The 'survey' package has adapted functions for the different things that we did today.
 Let's first create the weights for the data at hand, specify the sample design and store it in an R object that we can then call in our tests.

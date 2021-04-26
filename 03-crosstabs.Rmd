@@ -1,0 +1,34 @@
+
+#  Crosstabs
+
+Two cases:
+
+## Case 1: with survey weights
+
+```{r}
+nhanes %>% 
+  select(Gender, Education, wt=WTINT2YR) %>% 
+  # There's a clever way to do this, but it's easier to write this 3 times.
+  filter(!is.na(Gender), !is.na(wt), !is.na(Education)) %>% 
+  group_by(Gender, Education) %>% 
+  summarise(wt = sum(wt)) %>% 
+  group_by(Gender) %>% 
+  mutate(wt = scales::percent(wt/sum(wt))) %>% 
+  pivot_wider(id_cols = c(Gender, Education), names_from=Gender, values_from=wt) %>% 
+  knitr::kable()
+
+```
+
+## Case 2: Without survey weights
+
+Using the [janitor](https://cran.r-project.org/web/packages/janitor/index.html) package. 
+
+
+```{r}
+nhanes %>% 
+  filter(!is.na(Education), !is.na(Gender)) %>% 
+  tabyl(Education, Gender) %>% 
+  adorn_percentages("col") %>% 
+  adorn_pct_formatting(digits = 2) %>% 
+  knitr::kable()
+```

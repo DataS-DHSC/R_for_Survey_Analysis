@@ -1,0 +1,2072 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 9 Loading packages and data | Intermediate R - R for Survey Analysis</title>
+  <meta name="description" content="Course notes for the Intermediate R course run internally at DHSC." />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 9 Loading packages and data | Intermediate R - R for Survey Analysis" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="Course notes for the Intermediate R course run internally at DHSC." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 9 Loading packages and data | Intermediate R - R for Survey Analysis" />
+  
+  <meta name="twitter:description" content="Course notes for the Intermediate R course run internally at DHSC." />
+  
+
+<meta name="author" content="DHSC Analysts" />
+
+
+<meta name="date" content="2021-04-26" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="day-2-1.html"/>
+<link rel="next" href="plotting-basic-charts-base-r.html"/>
+<script src="libs/header-attrs-2.7/header-attrs.js"></script>
+<script src="libs/jquery-3.5.1/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<script src="libs/htmlwidgets-1.5.3/htmlwidgets.js"></script>
+<link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+<script src="libs/datatables-binding-0.18/datatables.js"></script>
+<link href="libs/dt-core-1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="libs/dt-core-1.10.20/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="libs/dt-core-1.10.20/js/jquery.dataTables.min.js"></script>
+<link href="libs/crosstalk-1.1.1/css/crosstalk.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.1.1/js/crosstalk.min.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Index</a></li>
+<li class="chapter" data-level="2" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>2</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="introduction.html"><a href="introduction.html#aims"><i class="fa fa-check"></i><b>2.1</b> Aims</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="introduction.html"><a href="introduction.html#day-1"><i class="fa fa-check"></i><b>2.1.1</b> Day 1</a></li>
+<li class="chapter" data-level="2.1.2" data-path="introduction.html"><a href="introduction.html#day-2"><i class="fa fa-check"></i><b>2.1.2</b> Day 2</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="introduction.html"><a href="introduction.html#why-r"><i class="fa fa-check"></i><b>2.2</b> Why R</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="day-1-1.html"><a href="day-1-1.html"><i class="fa fa-check"></i><b>3</b> Day 1</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="day-1-1.html"><a href="day-1-1.html#outline-for-day-1"><i class="fa fa-check"></i><b>3.1</b> Outline for Day 1</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="loading-survey-data.html"><a href="loading-survey-data.html"><i class="fa fa-check"></i><b>4</b> Loading Survey Data</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="loading-survey-data.html"><a href="loading-survey-data.html#analysing-a-survey-in-r"><i class="fa fa-check"></i><b>4.1</b> Analysing a survey in R</a></li>
+<li class="chapter" data-level="4.2" data-path="loading-survey-data.html"><a href="loading-survey-data.html#loading-the-data"><i class="fa fa-check"></i><b>4.2</b> Loading the data</a></li>
+<li class="chapter" data-level="4.3" data-path="loading-survey-data.html"><a href="loading-survey-data.html#cleaning-the-data"><i class="fa fa-check"></i><b>4.3</b> Cleaning the data</a></li>
+<li class="chapter" data-level="4.4" data-path="loading-survey-data.html"><a href="loading-survey-data.html#exploring-the-data"><i class="fa fa-check"></i><b>4.4</b> Exploring the data</a></li>
+<li class="chapter" data-level="4.5" data-path="loading-survey-data.html"><a href="loading-survey-data.html#applying-survey-weighting-for-exploratory-stats"><i class="fa fa-check"></i><b>4.5</b> Applying survey weighting for exploratory stats</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="crosstabs.html"><a href="crosstabs.html"><i class="fa fa-check"></i><b>5</b> Crosstabs</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="crosstabs.html"><a href="crosstabs.html#case-1-with-survey-weights"><i class="fa fa-check"></i><b>5.1</b> Case 1: with survey weights</a></li>
+<li class="chapter" data-level="5.2" data-path="crosstabs.html"><a href="crosstabs.html#case-2-without-survey-weights"><i class="fa fa-check"></i><b>5.2</b> Case 2: Without survey weights</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="loading-survey-data-1.html"><a href="loading-survey-data-1.html"><i class="fa fa-check"></i><b>6</b> Loading Survey Data</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="loading-survey-data-1.html"><a href="loading-survey-data-1.html#analysing-a-survey-in-r-1"><i class="fa fa-check"></i><b>6.1</b> Analysing a survey in R</a></li>
+<li class="chapter" data-level="6.2" data-path="loading-survey-data-1.html"><a href="loading-survey-data-1.html#loading-the-data-1"><i class="fa fa-check"></i><b>6.2</b> Loading the data</a></li>
+<li class="chapter" data-level="6.3" data-path="loading-survey-data-1.html"><a href="loading-survey-data-1.html#cleaning-the-data-1"><i class="fa fa-check"></i><b>6.3</b> Cleaning the data</a></li>
+<li class="chapter" data-level="6.4" data-path="loading-survey-data-1.html"><a href="loading-survey-data-1.html#exploring-the-data-1"><i class="fa fa-check"></i><b>6.4</b> Exploring the data</a></li>
+<li class="chapter" data-level="6.5" data-path="loading-survey-data-1.html"><a href="loading-survey-data-1.html#applying-survey-weighting-for-exploratory-stats-1"><i class="fa fa-check"></i><b>6.5</b> Applying survey weighting for exploratory stats</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="crosstabs-1.html"><a href="crosstabs-1.html"><i class="fa fa-check"></i><b>7</b> Crosstabs</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="crosstabs-1.html"><a href="crosstabs-1.html#case-1-with-survey-weights-1"><i class="fa fa-check"></i><b>7.1</b> Case 1: with survey weights</a></li>
+<li class="chapter" data-level="7.2" data-path="crosstabs-1.html"><a href="crosstabs-1.html#case-2-without-survey-weights-1"><i class="fa fa-check"></i><b>7.2</b> Case 2: Without survey weights</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="day-2-1.html"><a href="day-2-1.html"><i class="fa fa-check"></i><b>8</b> Day 2</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="day-2-1.html"><a href="day-2-1.html#outline-for-day-2"><i class="fa fa-check"></i><b>8.1</b> Outline for Day 2</a>
+<ul>
+<li class="chapter" data-level="8.1.1" data-path="day-2-1.html"><a href="day-2-1.html#take-home-messages-to-start-with"><i class="fa fa-check"></i><b>8.1.1</b> Take home messages to start with</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="loading-packages-and-data.html"><a href="loading-packages-and-data.html"><i class="fa fa-check"></i><b>9</b> Loading packages and data</a></li>
+<li class="chapter" data-level="10" data-path="plotting-basic-charts-base-r.html"><a href="plotting-basic-charts-base-r.html"><i class="fa fa-check"></i><b>10</b> Plotting basic charts (base R)</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="plotting-basic-charts-base-r.html"><a href="plotting-basic-charts-base-r.html#histograms---basic-frequencies"><i class="fa fa-check"></i><b>10.1</b> histograms - basic frequencies</a></li>
+<li class="chapter" data-level="10.2" data-path="plotting-basic-charts-base-r.html"><a href="plotting-basic-charts-base-r.html#bar-charts---plotting-stats-across-categories"><i class="fa fa-check"></i><b>10.2</b> bar charts - plotting stats across categories</a></li>
+<li class="chapter" data-level="10.3" data-path="plotting-basic-charts-base-r.html"><a href="plotting-basic-charts-base-r.html#box-plots---plotting-distribution-of-several-categoriesvars"><i class="fa fa-check"></i><b>10.3</b> Box plots - plotting distribution of several categories/vars</a></li>
+<li class="chapter" data-level="10.4" data-path="plotting-basic-charts-base-r.html"><a href="plotting-basic-charts-base-r.html#scatter-plots---relationship-between-two-continuous-vars"><i class="fa fa-check"></i><b>10.4</b> Scatter plots - relationship between two continuous vars</a></li>
+<li class="chapter" data-level="10.5" data-path="plotting-basic-charts-base-r.html"><a href="plotting-basic-charts-base-r.html#tiny-statistics-excursion"><i class="fa fa-check"></i><b>10.5</b> Tiny statistics excursion</a></li>
+<li class="chapter" data-level="10.6" data-path="plotting-basic-charts-base-r.html"><a href="plotting-basic-charts-base-r.html#are-there-any-other-plots-that-you-regularly-use"><i class="fa fa-check"></i><b>10.6</b> Are there any other plots that you regularly use?</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="intermediate-plotting-in-r-ggplot2.html"><a href="intermediate-plotting-in-r-ggplot2.html"><i class="fa fa-check"></i><b>11</b> Intermediate plotting in R (ggplot2)</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="intermediate-plotting-in-r-ggplot2.html"><a href="intermediate-plotting-in-r-ggplot2.html#adding-transparency"><i class="fa fa-check"></i><b>11.1</b> Adding transparency</a></li>
+<li class="chapter" data-level="11.2" data-path="intermediate-plotting-in-r-ggplot2.html"><a href="intermediate-plotting-in-r-ggplot2.html#adding-automatic-line-of-best-fit"><i class="fa fa-check"></i><b>11.2</b> Adding automatic line of best fit</a></li>
+<li class="chapter" data-level="11.3" data-path="intermediate-plotting-in-r-ggplot2.html"><a href="intermediate-plotting-in-r-ggplot2.html#adding-colours"><i class="fa fa-check"></i><b>11.3</b> Adding colours</a></li>
+<li class="chapter" data-level="11.4" data-path="intermediate-plotting-in-r-ggplot2.html"><a href="intermediate-plotting-in-r-ggplot2.html#fitting-a-line-of-best-fit-for-each-group-of-a-categorical-variable"><i class="fa fa-check"></i><b>11.4</b> Fitting a line of best fit for each group of a categorical variable</a></li>
+<li class="chapter" data-level="11.5" data-path="intermediate-plotting-in-r-ggplot2.html"><a href="intermediate-plotting-in-r-ggplot2.html#exercise-brief-in-class-practice-of-making-charts"><i class="fa fa-check"></i><b>11.5</b> Exercise: Brief in-class practice of making charts</a></li>
+<li class="chapter" data-level="11.6" data-path="intermediate-plotting-in-r-ggplot2.html"><a href="intermediate-plotting-in-r-ggplot2.html#ggplot-cheat-sheet"><i class="fa fa-check"></i><b>11.6</b> ggplot cheat sheet</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="regression-model.html"><a href="regression-model.html"><i class="fa fa-check"></i><b>12</b> Regression model</a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="regression-model.html"><a href="regression-model.html#simple-linear-regression"><i class="fa fa-check"></i><b>12.1</b> Simple linear regression</a></li>
+<li class="chapter" data-level="12.2" data-path="regression-model.html"><a href="regression-model.html#multiple-linear-regression"><i class="fa fa-check"></i><b>12.2</b> Multiple linear regression</a></li>
+<li class="chapter" data-level="12.3" data-path="regression-model.html"><a href="regression-model.html#lunch-break"><i class="fa fa-check"></i><b>12.3</b> Lunch Break</a></li>
+<li class="chapter" data-level="12.4" data-path="regression-model.html"><a href="regression-model.html#ggplot-cheat-sheet-reminder"><i class="fa fa-check"></i><b>12.4</b> ggplot cheat sheet reminder:</a></li>
+<li class="chapter" data-level="12.5" data-path="regression-model.html"><a href="regression-model.html#regression-output-inspection-cont."><i class="fa fa-check"></i><b>12.5</b> Regression output inspection (cont.)</a>
+<ul>
+<li class="chapter" data-level="12.5.1" data-path="regression-model.html"><a href="regression-model.html#try-this-for-yourselves"><i class="fa fa-check"></i><b>12.5.1</b> Try this for yourselves</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="testing-regression-assumptions.html"><a href="testing-regression-assumptions.html"><i class="fa fa-check"></i><b>13</b> Testing regression assumptions</a>
+<ul>
+<li class="chapter" data-level="13.1" data-path="testing-regression-assumptions.html"><a href="testing-regression-assumptions.html#linear-relationship"><i class="fa fa-check"></i><b>13.1</b> Linear relationship</a></li>
+<li class="chapter" data-level="13.2" data-path="testing-regression-assumptions.html"><a href="testing-regression-assumptions.html#normality-of-residuals"><i class="fa fa-check"></i><b>13.2</b> normality of residuals</a></li>
+<li class="chapter" data-level="13.3" data-path="testing-regression-assumptions.html"><a href="testing-regression-assumptions.html#testing-the-homoscedasticity-assumption"><i class="fa fa-check"></i><b>13.3</b> Testing the Homoscedasticity Assumption</a></li>
+<li class="chapter" data-level="13.4" data-path="testing-regression-assumptions.html"><a href="testing-regression-assumptions.html#test-for-autocorrelation-violations-of-independence"><i class="fa fa-check"></i><b>13.4</b> Test for autocorrelation (Violations of independence)</a></li>
+<li class="chapter" data-level="13.5" data-path="testing-regression-assumptions.html"><a href="testing-regression-assumptions.html#collinearity"><i class="fa fa-check"></i><b>13.5</b> Collinearity</a></li>
+<li class="chapter" data-level="13.6" data-path="testing-regression-assumptions.html"><a href="testing-regression-assumptions.html#multicollinearity"><i class="fa fa-check"></i><b>13.6</b> Multicollinearity</a></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="significance-tests.html"><a href="significance-tests.html"><i class="fa fa-check"></i><b>14</b> Significance tests</a>
+<ul>
+<li class="chapter" data-level="14.1" data-path="significance-tests.html"><a href="significance-tests.html#chi-square"><i class="fa fa-check"></i><b>14.1</b> Chi-square</a></li>
+<li class="chapter" data-level="14.2" data-path="significance-tests.html"><a href="significance-tests.html#t-test"><i class="fa fa-check"></i><b>14.2</b> T-test</a></li>
+</ul></li>
+<li class="chapter" data-level="15" data-path="homework-questions.html"><a href="homework-questions.html"><i class="fa fa-check"></i><b>15</b> ‘Homework’ questions</a>
+<ul>
+<li class="chapter" data-level="15.1" data-path="homework-questions.html"><a href="homework-questions.html#training-evaluation"><i class="fa fa-check"></i><b>15.1</b> Training evaluation</a></li>
+</ul></li>
+<li class="chapter" data-level="16" data-path="extra-survey-specific-functions.html"><a href="extra-survey-specific-functions.html"><i class="fa fa-check"></i><b>16</b> Extra: Survey specific functions</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Intermediate R - R for Survey Analysis</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="loading-packages-and-data" class="section level1" number="9">
+<h1><span class="header-section-number">Chapter 9</span> Loading packages and data</h1>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="loading-packages-and-data.html#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># load all required packages</span></span>
+<span id="cb25-2"><a href="loading-packages-and-data.html#cb25-2" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(dplyr, readr, ggplot2, corrplot, NHANES, survey, broom, lmtest, car, knitr)</span></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="loading-packages-and-data.html#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># inspect data by calling head() function</span></span>
+<span id="cb26-2"><a href="loading-packages-and-data.html#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="co"># head(nhanes)</span></span>
+<span id="cb26-3"><a href="loading-packages-and-data.html#cb26-3" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="fu">head</span>(nhanes),<span class="at">format =</span> <span class="st">&#39;html&#39;</span>)</span></code></pre></div>
+<table>
+<thead>
+<tr>
+<th style="text-align:right;">
+ID
+</th>
+<th style="text-align:left;">
+SurveyYr
+</th>
+<th style="text-align:left;">
+Gender
+</th>
+<th style="text-align:right;">
+Age
+</th>
+<th style="text-align:right;">
+AgeMonths
+</th>
+<th style="text-align:left;">
+Race1
+</th>
+<th style="text-align:left;">
+Race3
+</th>
+<th style="text-align:left;">
+Education
+</th>
+<th style="text-align:left;">
+MaritalStatus
+</th>
+<th style="text-align:left;">
+HHIncome
+</th>
+<th style="text-align:right;">
+HHIncomeMid
+</th>
+<th style="text-align:right;">
+Poverty
+</th>
+<th style="text-align:right;">
+HomeRooms
+</th>
+<th style="text-align:left;">
+HomeOwn
+</th>
+<th style="text-align:left;">
+Work
+</th>
+<th style="text-align:right;">
+Weight
+</th>
+<th style="text-align:right;">
+Length
+</th>
+<th style="text-align:right;">
+HeadCirc
+</th>
+<th style="text-align:right;">
+Height
+</th>
+<th style="text-align:right;">
+BMI
+</th>
+<th style="text-align:left;">
+BMICatUnder20yrs
+</th>
+<th style="text-align:left;">
+BMI_WHO
+</th>
+<th style="text-align:right;">
+Pulse
+</th>
+<th style="text-align:right;">
+BPSysAve
+</th>
+<th style="text-align:right;">
+BPDiaAve
+</th>
+<th style="text-align:right;">
+BPSys1
+</th>
+<th style="text-align:right;">
+BPDia1
+</th>
+<th style="text-align:right;">
+BPSys2
+</th>
+<th style="text-align:right;">
+BPDia2
+</th>
+<th style="text-align:right;">
+BPSys3
+</th>
+<th style="text-align:right;">
+BPDia3
+</th>
+<th style="text-align:right;">
+Testosterone
+</th>
+<th style="text-align:right;">
+DirectChol
+</th>
+<th style="text-align:right;">
+TotChol
+</th>
+<th style="text-align:right;">
+UrineVol1
+</th>
+<th style="text-align:right;">
+UrineFlow1
+</th>
+<th style="text-align:right;">
+UrineVol2
+</th>
+<th style="text-align:right;">
+UrineFlow2
+</th>
+<th style="text-align:left;">
+Diabetes
+</th>
+<th style="text-align:right;">
+DiabetesAge
+</th>
+<th style="text-align:left;">
+HealthGen
+</th>
+<th style="text-align:right;">
+DaysPhysHlthBad
+</th>
+<th style="text-align:right;">
+DaysMentHlthBad
+</th>
+<th style="text-align:left;">
+LittleInterest
+</th>
+<th style="text-align:left;">
+Depressed
+</th>
+<th style="text-align:right;">
+nPregnancies
+</th>
+<th style="text-align:right;">
+nBabies
+</th>
+<th style="text-align:right;">
+Age1stBaby
+</th>
+<th style="text-align:right;">
+SleepHrsNight
+</th>
+<th style="text-align:left;">
+SleepTrouble
+</th>
+<th style="text-align:left;">
+PhysActive
+</th>
+<th style="text-align:right;">
+PhysActiveDays
+</th>
+<th style="text-align:left;">
+TVHrsDay
+</th>
+<th style="text-align:left;">
+CompHrsDay
+</th>
+<th style="text-align:right;">
+TVHrsDayChild
+</th>
+<th style="text-align:right;">
+CompHrsDayChild
+</th>
+<th style="text-align:left;">
+Alcohol12PlusYr
+</th>
+<th style="text-align:right;">
+AlcoholDay
+</th>
+<th style="text-align:right;">
+AlcoholYear
+</th>
+<th style="text-align:left;">
+SmokeNow
+</th>
+<th style="text-align:left;">
+Smoke100
+</th>
+<th style="text-align:right;">
+SmokeAge
+</th>
+<th style="text-align:left;">
+Marijuana
+</th>
+<th style="text-align:right;">
+AgeFirstMarij
+</th>
+<th style="text-align:left;">
+RegularMarij
+</th>
+<th style="text-align:right;">
+AgeRegMarij
+</th>
+<th style="text-align:left;">
+HardDrugs
+</th>
+<th style="text-align:left;">
+SexEver
+</th>
+<th style="text-align:right;">
+SexAge
+</th>
+<th style="text-align:right;">
+SexNumPartnLife
+</th>
+<th style="text-align:right;">
+SexNumPartYear
+</th>
+<th style="text-align:left;">
+SameSex
+</th>
+<th style="text-align:left;">
+SexOrientation
+</th>
+<th style="text-align:right;">
+WTINT2YR
+</th>
+<th style="text-align:right;">
+WTMEC2YR
+</th>
+<th style="text-align:right;">
+SDMVPSU
+</th>
+<th style="text-align:right;">
+SDMVSTRA
+</th>
+<th style="text-align:left;">
+PregnantNow
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+51624
+</td>
+<td style="text-align:left;">
+2009_10
+</td>
+<td style="text-align:left;">
+male
+</td>
+<td style="text-align:right;">
+34
+</td>
+<td style="text-align:right;">
+409
+</td>
+<td style="text-align:left;">
+White
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+High School
+</td>
+<td style="text-align:left;">
+Married
+</td>
+<td style="text-align:left;">
+25000-34999
+</td>
+<td style="text-align:right;">
+30000
+</td>
+<td style="text-align:right;">
+1.36
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:left;">
+Own
+</td>
+<td style="text-align:left;">
+NotWorking
+</td>
+<td style="text-align:right;">
+87.4
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+164.7
+</td>
+<td style="text-align:right;">
+32.22
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+30.0_plus
+</td>
+<td style="text-align:right;">
+70
+</td>
+<td style="text-align:right;">
+113
+</td>
+<td style="text-align:right;">
+85
+</td>
+<td style="text-align:right;">
+114
+</td>
+<td style="text-align:right;">
+88
+</td>
+<td style="text-align:right;">
+114
+</td>
+<td style="text-align:right;">
+88
+</td>
+<td style="text-align:right;">
+112
+</td>
+<td style="text-align:right;">
+82
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1.29
+</td>
+<td style="text-align:right;">
+3.49
+</td>
+<td style="text-align:right;">
+352
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+Good
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:left;">
+Most
+</td>
+<td style="text-align:left;">
+Several
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:left;">
+Yes
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+Yes
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+Yes
+</td>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:left;">
+Yes
+</td>
+<td style="text-align:right;">
+17
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+Yes
+</td>
+<td style="text-align:left;">
+Yes
+</td>
+<td style="text-align:right;">
+16
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+Heterosexual
+</td>
+<td style="text-align:right;">
+80100.54
+</td>
+<td style="text-align:right;">
+81528.77
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+83
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+51625
+</td>
+<td style="text-align:left;">
+2009_10
+</td>
+<td style="text-align:left;">
+male
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+49
+</td>
+<td style="text-align:left;">
+Other
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+20000-24999
+</td>
+<td style="text-align:right;">
+22500
+</td>
+<td style="text-align:right;">
+1.07
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:left;">
+Own
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+17.0
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+105.4
+</td>
+<td style="text-align:right;">
+15.30
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+12.0_18.5
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+53901.10
+</td>
+<td style="text-align:right;">
+56995.04
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+79
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+51626
+</td>
+<td style="text-align:left;">
+2009_10
+</td>
+<td style="text-align:left;">
+male
+</td>
+<td style="text-align:right;">
+16
+</td>
+<td style="text-align:right;">
+202
+</td>
+<td style="text-align:left;">
+Black
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+45000-54999
+</td>
+<td style="text-align:right;">
+50000
+</td>
+<td style="text-align:right;">
+2.27
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:left;">
+Own
+</td>
+<td style="text-align:left;">
+NotWorking
+</td>
+<td style="text-align:right;">
+72.3
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+181.3
+</td>
+<td style="text-align:right;">
+22.00
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+18.5_to_24.9
+</td>
+<td style="text-align:right;">
+68
+</td>
+<td style="text-align:right;">
+109
+</td>
+<td style="text-align:right;">
+59
+</td>
+<td style="text-align:right;">
+112
+</td>
+<td style="text-align:right;">
+62
+</td>
+<td style="text-align:right;">
+114
+</td>
+<td style="text-align:right;">
+60
+</td>
+<td style="text-align:right;">
+104
+</td>
+<td style="text-align:right;">
+58
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1.55
+</td>
+<td style="text-align:right;">
+4.97
+</td>
+<td style="text-align:right;">
+281
+</td>
+<td style="text-align:right;">
+0.415
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+Vgood
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+Yes
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+13953.08
+</td>
+<td style="text-align:right;">
+14509.28
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+84
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+51627
+</td>
+<td style="text-align:left;">
+2009_10
+</td>
+<td style="text-align:left;">
+male
+</td>
+<td style="text-align:right;">
+10
+</td>
+<td style="text-align:right;">
+131
+</td>
+<td style="text-align:left;">
+Black
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+20000-24999
+</td>
+<td style="text-align:right;">
+22500
+</td>
+<td style="text-align:right;">
+0.81
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:left;">
+Rent
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+39.8
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+147.8
+</td>
+<td style="text-align:right;">
+18.22
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+12.0_18.5
+</td>
+<td style="text-align:right;">
+68
+</td>
+<td style="text-align:right;">
+93
+</td>
+<td style="text-align:right;">
+41
+</td>
+<td style="text-align:right;">
+92
+</td>
+<td style="text-align:right;">
+36
+</td>
+<td style="text-align:right;">
+94
+</td>
+<td style="text-align:right;">
+44
+</td>
+<td style="text-align:right;">
+92
+</td>
+<td style="text-align:right;">
+38
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1.89
+</td>
+<td style="text-align:right;">
+4.16
+</td>
+<td style="text-align:right;">
+139
+</td>
+<td style="text-align:right;">
+1.078
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+11664.90
+</td>
+<td style="text-align:right;">
+12041.64
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+86
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+51628
+</td>
+<td style="text-align:left;">
+2009_10
+</td>
+<td style="text-align:left;">
+female
+</td>
+<td style="text-align:right;">
+60
+</td>
+<td style="text-align:right;">
+722
+</td>
+<td style="text-align:left;">
+Black
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+High School
+</td>
+<td style="text-align:left;">
+Widowed
+</td>
+<td style="text-align:left;">
+10000-14999
+</td>
+<td style="text-align:right;">
+12500
+</td>
+<td style="text-align:right;">
+0.69
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:left;">
+Rent
+</td>
+<td style="text-align:left;">
+NotWorking
+</td>
+<td style="text-align:right;">
+116.8
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+166.0
+</td>
+<td style="text-align:right;">
+42.39
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+30.0_plus
+</td>
+<td style="text-align:right;">
+72
+</td>
+<td style="text-align:right;">
+150
+</td>
+<td style="text-align:right;">
+68
+</td>
+<td style="text-align:right;">
+154
+</td>
+<td style="text-align:right;">
+70
+</td>
+<td style="text-align:right;">
+150
+</td>
+<td style="text-align:right;">
+68
+</td>
+<td style="text-align:right;">
+150
+</td>
+<td style="text-align:right;">
+68
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1.16
+</td>
+<td style="text-align:right;">
+5.22
+</td>
+<td style="text-align:right;">
+30
+</td>
+<td style="text-align:right;">
+0.476
+</td>
+<td style="text-align:right;">
+246
+</td>
+<td style="text-align:right;">
+2.51
+</td>
+<td style="text-align:left;">
+Yes
+</td>
+<td style="text-align:right;">
+56
+</td>
+<td style="text-align:left;">
+Fair
+</td>
+<td style="text-align:right;">
+20
+</td>
+<td style="text-align:right;">
+25
+</td>
+<td style="text-align:left;">
+Most
+</td>
+<td style="text-align:left;">
+Most
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+Yes
+</td>
+<td style="text-align:left;">
+Yes
+</td>
+<td style="text-align:right;">
+16
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+Yes
+</td>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+20090.34
+</td>
+<td style="text-align:right;">
+21000.34
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+75
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+51629
+</td>
+<td style="text-align:left;">
+2009_10
+</td>
+<td style="text-align:left;">
+male
+</td>
+<td style="text-align:right;">
+26
+</td>
+<td style="text-align:right;">
+313
+</td>
+<td style="text-align:left;">
+Mexican
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+9 - 11th Grade
+</td>
+<td style="text-align:left;">
+Married
+</td>
+<td style="text-align:left;">
+25000-34999
+</td>
+<td style="text-align:right;">
+30000
+</td>
+<td style="text-align:right;">
+1.01
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:left;">
+Rent
+</td>
+<td style="text-align:left;">
+Working
+</td>
+<td style="text-align:right;">
+97.6
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+173.0
+</td>
+<td style="text-align:right;">
+32.61
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+30.0_plus
+</td>
+<td style="text-align:right;">
+72
+</td>
+<td style="text-align:right;">
+104
+</td>
+<td style="text-align:right;">
+49
+</td>
+<td style="text-align:right;">
+102
+</td>
+<td style="text-align:right;">
+50
+</td>
+<td style="text-align:right;">
+104
+</td>
+<td style="text-align:right;">
+48
+</td>
+<td style="text-align:right;">
+104
+</td>
+<td style="text-align:right;">
+50
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1.16
+</td>
+<td style="text-align:right;">
+4.14
+</td>
+<td style="text-align:right;">
+202
+</td>
+<td style="text-align:right;">
+0.563
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+Good
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+14
+</td>
+<td style="text-align:left;">
+None
+</td>
+<td style="text-align:left;">
+Most
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+Yes
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+Yes
+</td>
+<td style="text-align:right;">
+19
+</td>
+<td style="text-align:right;">
+48
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+Yes
+</td>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:left;">
+Yes
+</td>
+<td style="text-align:right;">
+10
+</td>
+<td style="text-align:left;">
+Yes
+</td>
+<td style="text-align:right;">
+12
+</td>
+<td style="text-align:left;">
+Yes
+</td>
+<td style="text-align:left;">
+Yes
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+10
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+Heterosexual
+</td>
+<td style="text-align:right;">
+22537.83
+</td>
+<td style="text-align:right;">
+22633.58
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+88
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="loading-packages-and-data.html#cb27-1" aria-hidden="true" tabindex="-1"></a>dplyr<span class="sc">::</span><span class="fu">glimpse</span>(nhanes) <span class="co"># if there are many columns (from dplyr package)</span></span></code></pre></div>
+<pre><code>## Rows: 20,293
+## Columns: 78
+## $ ID               &lt;int&gt; 51624, 51625, 51626, 51627, 51628, 51629, 51630, 51631, 51632, 51633, 51634, 51635, 51636, 51637, 51638,~
+## $ SurveyYr         &lt;fct&gt; 2009_10, 2009_10, 2009_10, 2009_10, 2009_10, 2009_10, 2009_10, 2009_10, 2009_10, 2009_10, 2009_10, 2009_~
+## $ Gender           &lt;fct&gt; male, male, male, male, female, male, female, female, male, male, male, male, male, female, male, male, ~
+## $ Age              &lt;int&gt; 34, 4, 16, 10, 60, 26, 49, 1, 10, 80, 10, 80, 4, 35, 9, 4, 17, 13, 7, 42, 0, 66, 8, 45, 28, 8, 11, 19, 1~
+## $ AgeMonths        &lt;int&gt; 409, 49, 202, 131, 722, 313, 596, 12, 124, NA, 121, NA, 48, 431, 115, 58, 208, 156, 85, 514, 9, 795, 101~
+## $ Race1            &lt;fct&gt; White, Other, Black, Black, Black, Mexican, White, White, Hispanic, White, Mexican, White, Other, White,~
+## $ Race3            &lt;fct&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, ~
+## $ Education        &lt;fct&gt; High School, NA, NA, NA, High School, 9 - 11th Grade, Some College, NA, NA, Some College, NA, 9 - 11th G~
+## $ MaritalStatus    &lt;fct&gt; Married, NA, NA, NA, Widowed, Married, LivePartner, NA, NA, Married, NA, Widowed, NA, Married, NA, NA, N~
+## $ HHIncome         &lt;fct&gt; 25000-34999, 20000-24999, 45000-54999, 20000-24999, 10000-14999, 25000-34999, 35000-44999, 35000-44999, ~
+## $ HHIncomeMid      &lt;int&gt; 30000, 22500, 50000, 22500, 12500, 30000, 40000, 40000, 70000, 17500, 22500, 17500, 30000, NA, 87500, 40~
+## $ Poverty          &lt;dbl&gt; 1.36, 1.07, 2.27, 0.81, 0.69, 1.01, 1.91, 1.36, 2.68, 1.27, 0.93, 1.69, 1.36, NA, 1.84, 0.95, 0.30, 2.91~
+## $ HomeRooms        &lt;int&gt; 6, 9, 5, 6, 6, 4, 5, 5, 7, 4, 5, 5, 7, NA, 6, 6, 5, 6, 4, 6, 9, 5, 7, 6, 4, 7, 5, 7, 5, 4, 5, 5, 10, 6, ~
+## $ HomeOwn          &lt;fct&gt; Own, Own, Own, Rent, Rent, Rent, Rent, Rent, Own, Own, Own, Own, Own, NA, Rent, Rent, Other, Rent, Rent,~
+## $ Work             &lt;fct&gt; NotWorking, NA, NotWorking, NA, NotWorking, Working, NotWorking, NA, NA, NotWorking, NA, NotWorking, NA,~
+## $ Weight           &lt;dbl&gt; 87.4, 17.0, 72.3, 39.8, 116.8, 97.6, 86.7, 9.4, 26.0, 79.1, 44.7, 89.6, NA, NA, 29.8, 17.9, 74.7, 40.6, ~
+## $ Length           &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, 75.7, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, 72.6, NA, NA, NA, NA, ~
+## $ HeadCirc         &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, ~
+## $ Height           &lt;dbl&gt; 164.7, 105.4, 181.3, 147.8, 166.0, 173.0, 168.4, NA, 140.3, 174.3, 143.6, 180.1, NA, NA, 133.1, 103.0, 1~
+## $ BMI              &lt;dbl&gt; 32.22, 15.30, 22.00, 18.22, 42.39, 32.61, 30.57, NA, 13.21, 26.04, 21.68, 27.62, NA, NA, 16.82, 16.87, 2~
+## $ BMICatUnder20yrs &lt;fct&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, ~
+## $ BMI_WHO          &lt;fct&gt; 30.0_plus, 12.0_18.5, 18.5_to_24.9, 12.0_18.5, 30.0_plus, 30.0_plus, 30.0_plus, NA, 12.0_18.5, 25.0_to_2~
+## $ Pulse            &lt;int&gt; 70, NA, 68, 68, 72, 72, 86, NA, 70, 88, 84, 54, NA, NA, 82, NA, 68, 102, NA, 86, NA, 92, 72, 62, 68, NA,~
+## $ BPSysAve         &lt;int&gt; 113, NA, 109, 93, 150, 104, 112, NA, 108, 139, 94, 121, NA, NA, 86, NA, 114, 112, NA, 116, NA, 138, 107,~
+## $ BPDiaAve         &lt;int&gt; 85, NA, 59, 41, 68, 49, 75, NA, 53, 43, 45, 60, NA, NA, 47, NA, 78, 37, NA, 100, NA, 62, 37, 64, 68, NA,~
+## $ BPSys1           &lt;int&gt; 114, NA, 112, 92, 154, 102, 118, NA, 106, 142, 94, 126, NA, NA, 84, NA, 122, 106, NA, NA, NA, 146, 114, ~
+## $ BPDia1           &lt;int&gt; 88, NA, 62, 36, 70, 50, 82, NA, 60, 62, 38, 62, NA, NA, 50, NA, 76, 12, NA, NA, NA, 68, 46, 62, 62, NA, ~
+## $ BPSys2           &lt;int&gt; 114, NA, 114, 94, 150, 104, 108, NA, 106, 140, 92, 124, NA, NA, 84, NA, 112, 110, NA, 116, NA, 138, 108,~
+## $ BPDia2           &lt;int&gt; 88, NA, 60, 44, 68, 48, 74, NA, 50, 46, 40, 62, NA, NA, 50, NA, 82, 38, NA, 100, NA, 64, 36, 68, 66, NA,~
+## $ BPSys3           &lt;int&gt; 112, NA, 104, 92, 150, 104, 116, NA, 110, 138, 96, 118, NA, NA, 88, NA, 116, 114, NA, NA, NA, 138, 106, ~
+## $ BPDia3           &lt;int&gt; 82, NA, 58, 38, 68, 50, 76, NA, 56, 40, 50, 58, NA, NA, 44, NA, 74, 36, NA, NA, NA, 60, 38, 60, 70, NA, ~
+## $ Testosterone     &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, ~
+## $ DirectChol       &lt;dbl&gt; 1.29, NA, 1.55, 1.89, 1.16, 1.16, 1.16, NA, 1.58, 1.94, 1.60, 1.27, NA, NA, 1.34, NA, 1.71, 1.63, 1.34, ~
+## $ TotChol          &lt;dbl&gt; 3.49, NA, 4.97, 4.16, 5.22, 4.14, 6.70, NA, 4.14, 4.71, 2.87, 3.83, NA, NA, 4.86, NA, 4.60, 5.04, 3.59, ~
+## $ UrineVol1        &lt;int&gt; 352, NA, 281, 139, 30, 202, 77, NA, 39, 128, 109, 38, NA, NA, 123, NA, 315, 290, 60, 137, NA, 70, 238, 1~
+## $ UrineFlow1       &lt;dbl&gt; NA, NA, 0.415, 1.078, 0.476, 0.563, 0.094, NA, 0.300, 1.208, 0.956, 0.197, NA, NA, 1.538, NA, NA, NA, 0.~
+## $ UrineVol2        &lt;int&gt; NA, NA, NA, NA, 246, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,~
+## $ UrineFlow2       &lt;dbl&gt; NA, NA, NA, NA, 2.51, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA~
+## $ Diabetes         &lt;fct&gt; No, No, No, No, Yes, No, No, No, No, No, No, Yes, No, No, No, No, No, No, No, Yes, NA, No, No, No, No, N~
+## $ DiabetesAge      &lt;int&gt; NA, NA, NA, NA, 56, NA, NA, NA, NA, NA, NA, 70, NA, NA, NA, NA, NA, NA, NA, 34, NA, NA, NA, NA, NA, NA, ~
+## $ HealthGen        &lt;fct&gt; Good, NA, Vgood, NA, Fair, Good, Good, NA, NA, Excellent, NA, Good, NA, NA, NA, NA, Good, Good, NA, Poor~
+## $ DaysPhysHlthBad  &lt;int&gt; 0, NA, 2, NA, 20, 2, 0, NA, NA, 0, NA, 0, NA, NA, NA, NA, 0, 0, NA, 0, NA, 0, NA, 0, 0, NA, NA, 4, NA, 1~
+## $ DaysMentHlthBad  &lt;int&gt; 15, NA, 0, NA, 25, 14, 10, NA, NA, 0, NA, 0, NA, NA, NA, NA, 18, 2, NA, 30, NA, 0, NA, 3, 0, NA, NA, 30,~
+## $ LittleInterest   &lt;fct&gt; Most, NA, NA, NA, Most, None, Several, NA, NA, None, NA, None, NA, NA, NA, NA, NA, NA, NA, Several, NA, ~
+## $ Depressed        &lt;fct&gt; Several, NA, NA, NA, Most, Most, Several, NA, NA, None, NA, None, NA, NA, NA, NA, NA, NA, NA, Most, NA, ~
+## $ nPregnancies     &lt;int&gt; NA, NA, NA, NA, 1, NA, 2, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, 2, NA, NA, NA, 1, NA, NA, NA, ~
+## $ nBabies          &lt;int&gt; NA, NA, NA, NA, 1, NA, 2, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, 2, NA, NA, NA, NA, NA, NA, NA,~
+## $ Age1stBaby       &lt;int&gt; NA, NA, NA, NA, NA, NA, 27, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, 18, NA, NA, NA, NA, NA, NA, ~
+## $ SleepHrsNight    &lt;int&gt; 4, NA, 8, NA, 4, 4, 8, NA, NA, 6, NA, 9, NA, 7, NA, NA, 7, NA, NA, 10, NA, 7, NA, 8, 8, NA, NA, 6, NA, 6~
+## $ SleepTrouble     &lt;fct&gt; Yes, NA, No, NA, No, No, Yes, NA, NA, No, NA, No, NA, No, NA, NA, No, NA, NA, Yes, NA, No, NA, No, No, N~
+## $ PhysActive       &lt;fct&gt; No, NA, Yes, NA, No, Yes, No, NA, NA, Yes, NA, No, NA, No, NA, NA, Yes, Yes, NA, No, NA, No, NA, Yes, Ye~
+## $ PhysActiveDays   &lt;int&gt; NA, NA, 5, NA, NA, 2, NA, NA, NA, 4, NA, NA, NA, NA, NA, NA, 6, 2, NA, NA, NA, NA, NA, 5, 2, NA, NA, 1, ~
+## $ TVHrsDay         &lt;fct&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, ~
+## $ CompHrsDay       &lt;fct&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, ~
+## $ TVHrsDayChild    &lt;int&gt; NA, 4, NA, 1, NA, NA, NA, NA, 1, NA, 3, NA, 2, NA, 5, 2, NA, NA, 2, NA, NA, NA, 1, NA, NA, 3, 1, NA, NA,~
+## $ CompHrsDayChild  &lt;int&gt; NA, 1, NA, 1, NA, NA, NA, NA, 0, NA, 0, NA, 1, NA, 0, 0, NA, NA, 6, NA, NA, NA, 6, NA, NA, 1, 0, NA, NA,~
+## $ Alcohol12PlusYr  &lt;fct&gt; Yes, NA, NA, NA, No, Yes, Yes, NA, NA, Yes, NA, No, NA, NA, NA, NA, NA, NA, NA, No, NA, Yes, NA, Yes, Ye~
+## $ AlcoholDay       &lt;int&gt; NA, NA, NA, NA, NA, 19, 2, NA, NA, 1, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, 8, NA, 3, 3, NA, NA, N~
+## $ AlcoholYear      &lt;int&gt; 0, NA, NA, NA, 0, 48, 20, NA, NA, 52, NA, 0, NA, NA, NA, NA, NA, NA, NA, 0, NA, 104, NA, 52, 12, NA, NA,~
+## $ SmokeNow         &lt;fct&gt; No, NA, NA, NA, Yes, No, Yes, NA, NA, No, NA, No, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, No, NA~
+## $ Smoke100         &lt;fct&gt; Yes, NA, NA, NA, Yes, Yes, Yes, NA, NA, Yes, NA, Yes, NA, No, NA, NA, NA, NA, NA, No, NA, No, NA, No, Ye~
+## $ SmokeAge         &lt;int&gt; 18, NA, NA, NA, 16, 15, 38, NA, NA, 16, NA, 21, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, 16, NA, ~
+## $ Marijuana        &lt;fct&gt; Yes, NA, NA, NA, NA, Yes, Yes, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, No, NA, NA, NA, Yes, No, ~
+## $ AgeFirstMarij    &lt;int&gt; 17, NA, NA, NA, NA, 10, 18, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, 13, NA, NA, ~
+## $ RegularMarij     &lt;fct&gt; No, NA, NA, NA, NA, Yes, No, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, No, NA, NA,~
+## $ AgeRegMarij      &lt;int&gt; NA, NA, NA, NA, NA, 12, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, ~
+## $ HardDrugs        &lt;fct&gt; Yes, NA, NA, NA, No, Yes, Yes, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, No, NA, No, NA, No, No, N~
+## $ SexEver          &lt;fct&gt; Yes, NA, NA, NA, Yes, Yes, Yes, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, Yes, NA, Yes, NA, Yes, N~
+## $ SexAge           &lt;int&gt; 16, NA, NA, NA, 15, 9, 12, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, 18, NA, 15, NA, 13, NA, NA, N~
+## $ SexNumPartnLife  &lt;int&gt; 8, NA, NA, NA, 4, 10, 10, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, 100, NA, 15, NA, 20, 0, NA, NA~
+## $ SexNumPartYear   &lt;int&gt; 1, NA, NA, NA, NA, 1, 1, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, 1, NA, NA, NA, 0, 0, NA, NA, 1,~
+## $ SameSex          &lt;fct&gt; No, NA, NA, NA, No, No, Yes, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, No, NA, No, NA, Yes, No, NA~
+## $ SexOrientation   &lt;fct&gt; Heterosexual, NA, NA, NA, NA, Heterosexual, Heterosexual, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA~
+## $ WTINT2YR         &lt;dbl&gt; 80100.544, 53901.104, 13953.078, 11664.899, 20090.339, 22537.827, 74212.270, 23306.398, 8056.943, 11998.~
+## $ WTMEC2YR         &lt;dbl&gt; 81528.772, 56995.035, 14509.279, 12041.635, 21000.339, 22633.582, 74112.487, 24776.492, 8175.946, 12381.~
+## $ SDMVPSU          &lt;int&gt; 1, 2, 1, 2, 2, 1, 2, 2, 2, 1, 1, 1, 2, 2, 1, 1, 1, 1, 2, 2, 2, 1, 1, 2, 1, 2, 1, 2, 1, 2, 2, 1, 2, 1, 1,~
+## $ SDMVSTRA         &lt;int&gt; 83, 79, 84, 86, 75, 88, 85, 86, 88, 77, 86, 79, 84, 77, 88, 89, 81, 79, 88, 75, 80, 75, 77, 78, 76, 78, ~
+## $ PregnantNow      &lt;fct&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, Unknown, NA, NA, NA, NA, NA, No, NA, NA, NA, NA, NA,~</code></pre>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="loading-packages-and-data.html#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get a feeling for variables</span></span>
+<span id="cb29-2"><a href="loading-packages-and-data.html#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="co"># categorical</span></span>
+<span id="cb29-3"><a href="loading-packages-and-data.html#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(nhanes<span class="sc">$</span>Depressed)</span></code></pre></div>
+<pre><code>## [1] &quot;None&quot;    &quot;Several&quot; &quot;Most&quot;</code></pre>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="loading-packages-and-data.html#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(nhanes<span class="sc">$</span>Depressed,  <span class="at">useNA =</span> <span class="st">&quot;ifany&quot;</span>)</span></code></pre></div>
+<pre><code>## 
+##    None Several    Most    &lt;NA&gt; 
+##    7926    1774     814    9779</code></pre>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="loading-packages-and-data.html#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># numerical</span></span>
+<span id="cb33-2"><a href="loading-packages-and-data.html#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(nhanes<span class="sc">$</span>BMI, <span class="at">useNA =</span> <span class="st">&quot;ifany&quot;</span>)</span></code></pre></div>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA&#39;s 
+##   12.40   19.79   24.92   25.65   30.10   84.87    2279</code></pre>
+
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="day-2-1.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="plotting-basic-charts-base-r.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

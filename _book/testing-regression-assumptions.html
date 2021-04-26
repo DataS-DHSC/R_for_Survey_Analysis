@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 13 Testing regression assumptions | Intermediate R - R for Survey Analysis</title>
+  <meta name="description" content="Course notes for the Intermediate R course run internally at DHSC." />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 13 Testing regression assumptions | Intermediate R - R for Survey Analysis" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="Course notes for the Intermediate R course run internally at DHSC." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 13 Testing regression assumptions | Intermediate R - R for Survey Analysis" />
+  
+  <meta name="twitter:description" content="Course notes for the Intermediate R course run internally at DHSC." />
+  
+
+<meta name="author" content="DHSC Analysts" />
+
+
+<meta name="date" content="2021-04-26" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="regression-model.html"/>
+<link rel="next" href="significance-tests.html"/>
+<script src="libs/header-attrs-2.7/header-attrs.js"></script>
+<script src="libs/jquery-3.5.1/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<script src="libs/htmlwidgets-1.5.3/htmlwidgets.js"></script>
+<link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+<script src="libs/datatables-binding-0.18/datatables.js"></script>
+<link href="libs/dt-core-1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="libs/dt-core-1.10.20/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="libs/dt-core-1.10.20/js/jquery.dataTables.min.js"></script>
+<link href="libs/crosstalk-1.1.1/css/crosstalk.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.1.1/js/crosstalk.min.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Index</a></li>
+<li class="chapter" data-level="2" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>2</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="introduction.html"><a href="introduction.html#aims"><i class="fa fa-check"></i><b>2.1</b> Aims</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="introduction.html"><a href="introduction.html#day-1"><i class="fa fa-check"></i><b>2.1.1</b> Day 1</a></li>
+<li class="chapter" data-level="2.1.2" data-path="introduction.html"><a href="introduction.html#day-2"><i class="fa fa-check"></i><b>2.1.2</b> Day 2</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="introduction.html"><a href="introduction.html#why-r"><i class="fa fa-check"></i><b>2.2</b> Why R</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="day-1-1.html"><a href="day-1-1.html"><i class="fa fa-check"></i><b>3</b> Day 1</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="day-1-1.html"><a href="day-1-1.html#outline-for-day-1"><i class="fa fa-check"></i><b>3.1</b> Outline for Day 1</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="loading-survey-data.html"><a href="loading-survey-data.html"><i class="fa fa-check"></i><b>4</b> Loading Survey Data</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="loading-survey-data.html"><a href="loading-survey-data.html#analysing-a-survey-in-r"><i class="fa fa-check"></i><b>4.1</b> Analysing a survey in R</a></li>
+<li class="chapter" data-level="4.2" data-path="loading-survey-data.html"><a href="loading-survey-data.html#loading-the-data"><i class="fa fa-check"></i><b>4.2</b> Loading the data</a></li>
+<li class="chapter" data-level="4.3" data-path="loading-survey-data.html"><a href="loading-survey-data.html#cleaning-the-data"><i class="fa fa-check"></i><b>4.3</b> Cleaning the data</a></li>
+<li class="chapter" data-level="4.4" data-path="loading-survey-data.html"><a href="loading-survey-data.html#exploring-the-data"><i class="fa fa-check"></i><b>4.4</b> Exploring the data</a></li>
+<li class="chapter" data-level="4.5" data-path="loading-survey-data.html"><a href="loading-survey-data.html#applying-survey-weighting-for-exploratory-stats"><i class="fa fa-check"></i><b>4.5</b> Applying survey weighting for exploratory stats</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="crosstabs.html"><a href="crosstabs.html"><i class="fa fa-check"></i><b>5</b> Crosstabs</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="crosstabs.html"><a href="crosstabs.html#case-1-with-survey-weights"><i class="fa fa-check"></i><b>5.1</b> Case 1: with survey weights</a></li>
+<li class="chapter" data-level="5.2" data-path="crosstabs.html"><a href="crosstabs.html#case-2-without-survey-weights"><i class="fa fa-check"></i><b>5.2</b> Case 2: Without survey weights</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="loading-survey-data-1.html"><a href="loading-survey-data-1.html"><i class="fa fa-check"></i><b>6</b> Loading Survey Data</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="loading-survey-data-1.html"><a href="loading-survey-data-1.html#analysing-a-survey-in-r-1"><i class="fa fa-check"></i><b>6.1</b> Analysing a survey in R</a></li>
+<li class="chapter" data-level="6.2" data-path="loading-survey-data-1.html"><a href="loading-survey-data-1.html#loading-the-data-1"><i class="fa fa-check"></i><b>6.2</b> Loading the data</a></li>
+<li class="chapter" data-level="6.3" data-path="loading-survey-data-1.html"><a href="loading-survey-data-1.html#cleaning-the-data-1"><i class="fa fa-check"></i><b>6.3</b> Cleaning the data</a></li>
+<li class="chapter" data-level="6.4" data-path="loading-survey-data-1.html"><a href="loading-survey-data-1.html#exploring-the-data-1"><i class="fa fa-check"></i><b>6.4</b> Exploring the data</a></li>
+<li class="chapter" data-level="6.5" data-path="loading-survey-data-1.html"><a href="loading-survey-data-1.html#applying-survey-weighting-for-exploratory-stats-1"><i class="fa fa-check"></i><b>6.5</b> Applying survey weighting for exploratory stats</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="crosstabs-1.html"><a href="crosstabs-1.html"><i class="fa fa-check"></i><b>7</b> Crosstabs</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="crosstabs-1.html"><a href="crosstabs-1.html#case-1-with-survey-weights-1"><i class="fa fa-check"></i><b>7.1</b> Case 1: with survey weights</a></li>
+<li class="chapter" data-level="7.2" data-path="crosstabs-1.html"><a href="crosstabs-1.html#case-2-without-survey-weights-1"><i class="fa fa-check"></i><b>7.2</b> Case 2: Without survey weights</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="day-2-1.html"><a href="day-2-1.html"><i class="fa fa-check"></i><b>8</b> Day 2</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="day-2-1.html"><a href="day-2-1.html#outline-for-day-2"><i class="fa fa-check"></i><b>8.1</b> Outline for Day 2</a>
+<ul>
+<li class="chapter" data-level="8.1.1" data-path="day-2-1.html"><a href="day-2-1.html#take-home-messages-to-start-with"><i class="fa fa-check"></i><b>8.1.1</b> Take home messages to start with</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="loading-packages-and-data.html"><a href="loading-packages-and-data.html"><i class="fa fa-check"></i><b>9</b> Loading packages and data</a></li>
+<li class="chapter" data-level="10" data-path="plotting-basic-charts-base-r.html"><a href="plotting-basic-charts-base-r.html"><i class="fa fa-check"></i><b>10</b> Plotting basic charts (base R)</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="plotting-basic-charts-base-r.html"><a href="plotting-basic-charts-base-r.html#histograms---basic-frequencies"><i class="fa fa-check"></i><b>10.1</b> histograms - basic frequencies</a></li>
+<li class="chapter" data-level="10.2" data-path="plotting-basic-charts-base-r.html"><a href="plotting-basic-charts-base-r.html#bar-charts---plotting-stats-across-categories"><i class="fa fa-check"></i><b>10.2</b> bar charts - plotting stats across categories</a></li>
+<li class="chapter" data-level="10.3" data-path="plotting-basic-charts-base-r.html"><a href="plotting-basic-charts-base-r.html#box-plots---plotting-distribution-of-several-categoriesvars"><i class="fa fa-check"></i><b>10.3</b> Box plots - plotting distribution of several categories/vars</a></li>
+<li class="chapter" data-level="10.4" data-path="plotting-basic-charts-base-r.html"><a href="plotting-basic-charts-base-r.html#scatter-plots---relationship-between-two-continuous-vars"><i class="fa fa-check"></i><b>10.4</b> Scatter plots - relationship between two continuous vars</a></li>
+<li class="chapter" data-level="10.5" data-path="plotting-basic-charts-base-r.html"><a href="plotting-basic-charts-base-r.html#tiny-statistics-excursion"><i class="fa fa-check"></i><b>10.5</b> Tiny statistics excursion</a></li>
+<li class="chapter" data-level="10.6" data-path="plotting-basic-charts-base-r.html"><a href="plotting-basic-charts-base-r.html#are-there-any-other-plots-that-you-regularly-use"><i class="fa fa-check"></i><b>10.6</b> Are there any other plots that you regularly use?</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="intermediate-plotting-in-r-ggplot2.html"><a href="intermediate-plotting-in-r-ggplot2.html"><i class="fa fa-check"></i><b>11</b> Intermediate plotting in R (ggplot2)</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="intermediate-plotting-in-r-ggplot2.html"><a href="intermediate-plotting-in-r-ggplot2.html#adding-transparency"><i class="fa fa-check"></i><b>11.1</b> Adding transparency</a></li>
+<li class="chapter" data-level="11.2" data-path="intermediate-plotting-in-r-ggplot2.html"><a href="intermediate-plotting-in-r-ggplot2.html#adding-automatic-line-of-best-fit"><i class="fa fa-check"></i><b>11.2</b> Adding automatic line of best fit</a></li>
+<li class="chapter" data-level="11.3" data-path="intermediate-plotting-in-r-ggplot2.html"><a href="intermediate-plotting-in-r-ggplot2.html#adding-colours"><i class="fa fa-check"></i><b>11.3</b> Adding colours</a></li>
+<li class="chapter" data-level="11.4" data-path="intermediate-plotting-in-r-ggplot2.html"><a href="intermediate-plotting-in-r-ggplot2.html#fitting-a-line-of-best-fit-for-each-group-of-a-categorical-variable"><i class="fa fa-check"></i><b>11.4</b> Fitting a line of best fit for each group of a categorical variable</a></li>
+<li class="chapter" data-level="11.5" data-path="intermediate-plotting-in-r-ggplot2.html"><a href="intermediate-plotting-in-r-ggplot2.html#exercise-brief-in-class-practice-of-making-charts"><i class="fa fa-check"></i><b>11.5</b> Exercise: Brief in-class practice of making charts</a></li>
+<li class="chapter" data-level="11.6" data-path="intermediate-plotting-in-r-ggplot2.html"><a href="intermediate-plotting-in-r-ggplot2.html#ggplot-cheat-sheet"><i class="fa fa-check"></i><b>11.6</b> ggplot cheat sheet</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="regression-model.html"><a href="regression-model.html"><i class="fa fa-check"></i><b>12</b> Regression model</a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="regression-model.html"><a href="regression-model.html#simple-linear-regression"><i class="fa fa-check"></i><b>12.1</b> Simple linear regression</a></li>
+<li class="chapter" data-level="12.2" data-path="regression-model.html"><a href="regression-model.html#multiple-linear-regression"><i class="fa fa-check"></i><b>12.2</b> Multiple linear regression</a></li>
+<li class="chapter" data-level="12.3" data-path="regression-model.html"><a href="regression-model.html#lunch-break"><i class="fa fa-check"></i><b>12.3</b> Lunch Break</a></li>
+<li class="chapter" data-level="12.4" data-path="regression-model.html"><a href="regression-model.html#ggplot-cheat-sheet-reminder"><i class="fa fa-check"></i><b>12.4</b> ggplot cheat sheet reminder:</a></li>
+<li class="chapter" data-level="12.5" data-path="regression-model.html"><a href="regression-model.html#regression-output-inspection-cont."><i class="fa fa-check"></i><b>12.5</b> Regression output inspection (cont.)</a>
+<ul>
+<li class="chapter" data-level="12.5.1" data-path="regression-model.html"><a href="regression-model.html#try-this-for-yourselves"><i class="fa fa-check"></i><b>12.5.1</b> Try this for yourselves</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="testing-regression-assumptions.html"><a href="testing-regression-assumptions.html"><i class="fa fa-check"></i><b>13</b> Testing regression assumptions</a>
+<ul>
+<li class="chapter" data-level="13.1" data-path="testing-regression-assumptions.html"><a href="testing-regression-assumptions.html#linear-relationship"><i class="fa fa-check"></i><b>13.1</b> Linear relationship</a></li>
+<li class="chapter" data-level="13.2" data-path="testing-regression-assumptions.html"><a href="testing-regression-assumptions.html#normality-of-residuals"><i class="fa fa-check"></i><b>13.2</b> normality of residuals</a></li>
+<li class="chapter" data-level="13.3" data-path="testing-regression-assumptions.html"><a href="testing-regression-assumptions.html#testing-the-homoscedasticity-assumption"><i class="fa fa-check"></i><b>13.3</b> Testing the Homoscedasticity Assumption</a></li>
+<li class="chapter" data-level="13.4" data-path="testing-regression-assumptions.html"><a href="testing-regression-assumptions.html#test-for-autocorrelation-violations-of-independence"><i class="fa fa-check"></i><b>13.4</b> Test for autocorrelation (Violations of independence)</a></li>
+<li class="chapter" data-level="13.5" data-path="testing-regression-assumptions.html"><a href="testing-regression-assumptions.html#collinearity"><i class="fa fa-check"></i><b>13.5</b> Collinearity</a></li>
+<li class="chapter" data-level="13.6" data-path="testing-regression-assumptions.html"><a href="testing-regression-assumptions.html#multicollinearity"><i class="fa fa-check"></i><b>13.6</b> Multicollinearity</a></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="significance-tests.html"><a href="significance-tests.html"><i class="fa fa-check"></i><b>14</b> Significance tests</a>
+<ul>
+<li class="chapter" data-level="14.1" data-path="significance-tests.html"><a href="significance-tests.html#chi-square"><i class="fa fa-check"></i><b>14.1</b> Chi-square</a></li>
+<li class="chapter" data-level="14.2" data-path="significance-tests.html"><a href="significance-tests.html#t-test"><i class="fa fa-check"></i><b>14.2</b> T-test</a></li>
+</ul></li>
+<li class="chapter" data-level="15" data-path="homework-questions.html"><a href="homework-questions.html"><i class="fa fa-check"></i><b>15</b> ‘Homework’ questions</a>
+<ul>
+<li class="chapter" data-level="15.1" data-path="homework-questions.html"><a href="homework-questions.html#training-evaluation"><i class="fa fa-check"></i><b>15.1</b> Training evaluation</a></li>
+</ul></li>
+<li class="chapter" data-level="16" data-path="extra-survey-specific-functions.html"><a href="extra-survey-specific-functions.html"><i class="fa fa-check"></i><b>16</b> Extra: Survey specific functions</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Intermediate R - R for Survey Analysis</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="testing-regression-assumptions" class="section level1" number="13">
+<h1><span class="header-section-number">Chapter 13</span> Testing regression assumptions</h1>
+<p>In R, regression diagnostics plots (residual diagnostics plots) can be created using the base R function plot().</p>
+<div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb77-1"><a href="testing-regression-assumptions.html#cb77-1" aria-hidden="true" tabindex="-1"></a><span class="co"># define model</span></span>
+<span id="cb77-2"><a href="testing-regression-assumptions.html#cb77-2" aria-hidden="true" tabindex="-1"></a>simple_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(Weight <span class="sc">~</span> Height, <span class="at">data =</span> adults)</span>
+<span id="cb77-3"><a href="testing-regression-assumptions.html#cb77-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb77-4"><a href="testing-regression-assumptions.html#cb77-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Change the panel layout to 2 x 2 (to look at all 4 plots at once)</span></span>
+<span id="cb77-5"><a href="testing-regression-assumptions.html#cb77-5" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</span>
+<span id="cb77-6"><a href="testing-regression-assumptions.html#cb77-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb77-7"><a href="testing-regression-assumptions.html#cb77-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Use plot() function to create diagnostic plots</span></span>
+<span id="cb77-8"><a href="testing-regression-assumptions.html#cb77-8" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(simple_model)</span></code></pre></div>
+<p><img src="Intermediate-R---R-for-Survey-Analysis_files/figure-html/unnamed-chunk-53-1.png" width="672" /></p>
+<p>The diagnostic plots show residuals in four different ways:</p>
+<ol style="list-style-type: decimal">
+<li><p>Residuals vs Fitted: is used to check the assumptions of linearity. If the residuals are spread equally around a horizontal line without distinct patterns (red line is approximately horizontal at zero), that is a good indication of having a linear relationship.</p></li>
+<li><p>Normal Q-Q: is used to check the normality of residuals assumption. If the majority of the residuals follow the straight dashed line, then the assumption is fulfilled.</p></li>
+<li><p>Scale-Location: is used to check the homoscedasticity of residuals (equal variance of residuals). If the residuals are spread randomly and the see a horizontal line with equally (randomly) spread points, then the assumption is fulfilled.</p></li>
+<li><p>Residuals vs Leverage: is used to identify any influential value in our dataset. Influential values are extreme values that might influence the regression results when included or excluded from the analysis. Look for cases outside of a dashed line.</p></li>
+</ol>
+<div id="linear-relationship" class="section level2" number="13.1">
+<h2><span class="header-section-number">13.1</span> Linear relationship</h2>
+<p>Ideally we want a horizontal line around zero:</p>
+<div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb78-1"><a href="testing-regression-assumptions.html#cb78-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the first diagnostic plot </span></span>
+<span id="cb78-2"><a href="testing-regression-assumptions.html#cb78-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(simple_model,<span class="dv">1</span>)</span></code></pre></div>
+<p><img src="Intermediate-R---R-for-Survey-Analysis_files/figure-html/unnamed-chunk-54-1.png" width="672" /></p>
+<div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb79-1"><a href="testing-regression-assumptions.html#cb79-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Or plot the observed versus predicted values (again ideally a horizontal line)</span></span>
+<span id="cb79-2"><a href="testing-regression-assumptions.html#cb79-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(simple_model<span class="sc">$</span>fitted.values, simple_model<span class="sc">$</span>model<span class="sc">$</span>BMI)</span></code></pre></div>
+<p><img src="Intermediate-R---R-for-Survey-Analysis_files/figure-html/unnamed-chunk-54-2.png" width="672" /></p>
+<p>Looks good so far.</p>
+</div>
+<div id="normality-of-residuals" class="section level2" number="13.2">
+<h2><span class="header-section-number">13.2</span> normality of residuals</h2>
+<p>Histogram of residuals</p>
+<div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb80-1"><a href="testing-regression-assumptions.html#cb80-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(simple_model<span class="sc">$</span>residuals)</span></code></pre></div>
+<p><img src="Intermediate-R---R-for-Survey-Analysis_files/figure-html/unnamed-chunk-55-1.png" width="672" /></p>
+<p>QQ Plot of Residuals</p>
+<p>The QQ plot of residuals can be used to visually check the normality assumption. The normal probability plot of residuals should approximately follow a straight line.’
+A bow-shaped pattern of deviations from the diagonal indicates that the residuals have excessive skewness (i.e., they are not symmetrically distributed, with too many large errors in the same direction).
+An S-shaped pattern of deviations indicates that the residuals have excessive kurtosis–i.e., there are either too many or too few large errors in both directions.</p>
+<div class="sourceCode" id="cb81"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb81-1"><a href="testing-regression-assumptions.html#cb81-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(simple_model, <span class="dv">2</span>)</span></code></pre></div>
+<p><img src="Intermediate-R---R-for-Survey-Analysis_files/figure-html/unnamed-chunk-56-1.png" width="672" /></p>
+<p>The majority of the points fall approximately along the reference line, so we can assume normality. The endpoints are deviating from the straight line, suggesting a heavy-tailed distribution (Distribution is longer and tails are fatter, so there might be outliers).</p>
+<p>If we had less than 5k entries, we would perform a Shapiro-Wilk Normality Test. I include the code in case you need it.</p>
+<div class="sourceCode" id="cb82"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb82-1"><a href="testing-regression-assumptions.html#cb82-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Using pre-installed library(MASS)</span></span>
+<span id="cb82-2"><a href="testing-regression-assumptions.html#cb82-2" aria-hidden="true" tabindex="-1"></a><span class="co"># get distribution of studentized residuals (i.e. transform residuals for test)</span></span>
+<span id="cb82-3"><a href="testing-regression-assumptions.html#cb82-3" aria-hidden="true" tabindex="-1"></a>sresid <span class="ot">&lt;-</span> MASS<span class="sc">::</span><span class="fu">studres</span>(simple_model) <span class="co">#using MASS package function to transform data easily</span></span>
+<span id="cb82-4"><a href="testing-regression-assumptions.html#cb82-4" aria-hidden="true" tabindex="-1"></a><span class="fu">shapiro.test</span>(<span class="fu">sample</span>(sresid,<span class="dv">5000</span>)) <span class="co"># p value non-sign: normal distribution of residuals</span></span></code></pre></div>
+<pre><code>## 
+##  Shapiro-Wilk normality test
+## 
+## data:  sample(sresid, 5000)
+## W = 0.93227, p-value &lt; 2.2e-16</code></pre>
+</div>
+<div id="testing-the-homoscedasticity-assumption" class="section level2" number="13.3">
+<h2><span class="header-section-number">13.3</span> Testing the Homoscedasticity Assumption</h2>
+<div id="plotting-residuals" class="section level4" number="13.3.0.1">
+<h4><span class="header-section-number">13.3.0.1</span> Plotting residuals</h4>
+<p>Look at plots of residuals versus time and residuals versus predicted (i.e. fitted) value, and be alert for evidence of residuals that are getting larger (i.e., more spread-out) either as a function of time or as a function of the predicted value. (To be really thorough, you might also want to plot residuals versus some of the independent variables.)’</p>
+<div class="sourceCode" id="cb84"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb84-1"><a href="testing-regression-assumptions.html#cb84-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(simple_model, <span class="dv">1</span>)</span></code></pre></div>
+<p><img src="Intermediate-R---R-for-Survey-Analysis_files/figure-html/unnamed-chunk-58-1.png" width="672" /></p>
+<p>Scale-location plot / spread-location plot (same as above, just using standardised residuals)
+‘We want a more or less horizontal line with more or less equally spread points around.’</p>
+<div class="sourceCode" id="cb85"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb85-1"><a href="testing-regression-assumptions.html#cb85-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(simple_model, <span class="dv">3</span>)</span></code></pre></div>
+<p><img src="Intermediate-R---R-for-Survey-Analysis_files/figure-html/unnamed-chunk-59-1.png" width="672" />
+The red line does deviate slightly from being horizontal. There is no clear sign of heteroscedasticity (no clear deviation from horizontal line, no funnel shape of errors being larger where fitted values get larger).</p>
+</div>
+<div id="breusch-pagan-test" class="section level4" number="13.3.0.2">
+<h4><span class="header-section-number">13.3.0.2</span> Breusch-Pagan test</h4>
+<div class="sourceCode" id="cb86"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb86-1"><a href="testing-regression-assumptions.html#cb86-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Breusch-Pagan test</span></span>
+<span id="cb86-2"><a href="testing-regression-assumptions.html#cb86-2" aria-hidden="true" tabindex="-1"></a>lmtest<span class="sc">::</span><span class="fu">bptest</span>(simple_model)</span></code></pre></div>
+<pre><code>## 
+##  studentized Breusch-Pagan test
+## 
+## data:  simple_model
+## BP = 57.792, df = 1, p-value = 2.914e-14</code></pre>
+</div>
+<div id="whites-test" class="section level4" number="13.3.0.3">
+<h4><span class="header-section-number">13.3.0.3</span> White’s test</h4>
+<p>=&gt; This is a special case of the (simpler) Breusch-Pagan test.</p>
+<p>The only difference between White’s test and the Breusch-Pagan is that its auxiliary regression doesn’t include cross-terms or the original squared variables. To show this more clearly, we will use two rather than one regressor in this code example.</p>
+<div class="sourceCode" id="cb88"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb88-1"><a href="testing-regression-assumptions.html#cb88-1" aria-hidden="true" tabindex="-1"></a><span class="co"># General formula:</span></span>
+<span id="cb88-2"><a href="testing-regression-assumptions.html#cb88-2" aria-hidden="true" tabindex="-1"></a><span class="co"># m &lt;- lm(A ~ B + C, data = dataset) </span></span>
+<span id="cb88-3"><a href="testing-regression-assumptions.html#cb88-3" aria-hidden="true" tabindex="-1"></a><span class="co"># bptest(m, ~ B*C + I(B^2) + I(C^2), data = dataset)</span></span>
+<span id="cb88-4"><a href="testing-regression-assumptions.html#cb88-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb88-5"><a href="testing-regression-assumptions.html#cb88-5" aria-hidden="true" tabindex="-1"></a>BMI2_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(BMI <span class="sc">~</span> Poverty <span class="sc">+</span> PhysActiveDays, <span class="at">data =</span> adults)</span>
+<span id="cb88-6"><a href="testing-regression-assumptions.html#cb88-6" aria-hidden="true" tabindex="-1"></a><span class="fu">bptest</span>(BMI2_model, <span class="sc">~</span> Poverty<span class="sc">*</span>PhysActiveDays <span class="sc">+</span> <span class="fu">I</span>(Poverty<span class="sc">^</span><span class="dv">2</span>) <span class="sc">+</span> <span class="fu">I</span>(PhysActiveDays<span class="sc">^</span><span class="dv">2</span>), <span class="at">data =</span> adults)</span></code></pre></div>
+<pre><code>## 
+##  studentized Breusch-Pagan test
+## 
+## data:  BMI2_model
+## BP = 42.143, df = 5, p-value = 5.512e-08</code></pre>
+<p>The test suggests heteroscedasticity (i.e. residuals having a non-constant variance). The plots of residuals were not too worrying though. If we were quite concerned about heteroscedasticity, we could try using logarithmic or square root transformation on the response variable to reduce heteroscedasticity.</p>
+</div>
+</div>
+<div id="test-for-autocorrelation-violations-of-independence" class="section level2" number="13.4">
+<h2><span class="header-section-number">13.4</span> Test for autocorrelation (Violations of independence)</h2>
+<p>Best test for residual autocorrelation: Inspect autocorrelation plot of the residuals.
+Pay especially close attention to significant correlations at the first couple of lags and around seasonal periods, because these are probably not due to chance.</p>
+<p>Given that there is no time variable in the dat, we will use an inbuilt data set, just for this function demo using population count from the US census:</p>
+<div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb90-1"><a href="testing-regression-assumptions.html#cb90-1" aria-hidden="true" tabindex="-1"></a><span class="fu">acf</span>(uspop, <span class="at">lag.max =</span> <span class="dv">15</span>, <span class="at">plot =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<p><img src="Intermediate-R---R-for-Survey-Analysis_files/figure-html/unnamed-chunk-62-1.png" width="672" /></p>
+</div>
+<div id="collinearity" class="section level2" number="13.5">
+<h2><span class="header-section-number">13.5</span> Collinearity</h2>
+<p>A correlation matrix is probably the easiest starting point:</p>
+<div class="sourceCode" id="cb91"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb91-1"><a href="testing-regression-assumptions.html#cb91-1" aria-hidden="true" tabindex="-1"></a>model_corr_matrix <span class="ot">&lt;-</span> <span class="fu">cor</span>(nhanes <span class="sc">%&gt;%</span> </span>
+<span id="cb91-2"><a href="testing-regression-assumptions.html#cb91-2" aria-hidden="true" tabindex="-1"></a>                            <span class="fu">select</span>(Poverty, PhysActiveDays, Height),</span>
+<span id="cb91-3"><a href="testing-regression-assumptions.html#cb91-3" aria-hidden="true" tabindex="-1"></a>                          <span class="at">use =</span> <span class="st">&quot;pairwise.complete.obs&quot;</span>)</span>
+<span id="cb91-4"><a href="testing-regression-assumptions.html#cb91-4" aria-hidden="true" tabindex="-1"></a>model_corr_matrix</span></code></pre></div>
+<pre><code>##                    Poverty PhysActiveDays      Height
+## Poverty         1.00000000    -0.01352413  0.16476155
+## PhysActiveDays -0.01352413     1.00000000 -0.02127384
+## Height          0.16476155    -0.02127384  1.00000000</code></pre>
+<p>There are several packages available for visualizing a correlation matrix in R. One of the most common is the corrplot function.</p>
+<p>Positive correlations are displayed in a blue scale while negative correlations are displayed in a red scale. Probably not needed for our examples, but useful if you have more variables:</p>
+<div class="sourceCode" id="cb93"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb93-1"><a href="testing-regression-assumptions.html#cb93-1" aria-hidden="true" tabindex="-1"></a>corrplot<span class="sc">::</span><span class="fu">corrplot</span>(model_corr_matrix)</span></code></pre></div>
+<p><img src="Intermediate-R---R-for-Survey-Analysis_files/figure-html/unnamed-chunk-64-1.png" width="672" /></p>
+</div>
+<div id="multicollinearity" class="section level2" number="13.6">
+<h2><span class="header-section-number">13.6</span> Multicollinearity</h2>
+<p>Collinearity happens when two or more explanatory variables are correlated with each other. However, there is an extreme situation, called multicollinearity, where collinearity exists between three or more variables even if no pair of variables has a particularly high correlation. This means that there is redundancy between explanatory variables.</p>
+<p>Whilst collinearity can be detected with a correlation matrix, multicollinearity is not as easy to detect. The Variance Inflation Factor (VIF) can be used to find how much the variance of a regression coefficient is inflated due to multicollinearity in the model. The smallest possible value is one, indicating no multicollinearity. A value which exceeds 5 or 10 indicates a problematic amount of multicollinearity in the data. In R we use the vif() function from the car package to detect multicollinearity in a multiple regression model (where the response variable is ozone and all explanatory variables are added):</p>
+<div class="sourceCode" id="cb94"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb94-1"><a href="testing-regression-assumptions.html#cb94-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define a regression model and save the model object as &quot;BMI3_model&quot;</span></span>
+<span id="cb94-2"><a href="testing-regression-assumptions.html#cb94-2" aria-hidden="true" tabindex="-1"></a>BMI3_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(BMI <span class="sc">~</span> Poverty <span class="sc">+</span> PhysActiveDays <span class="sc">+</span> Height, <span class="at">data =</span> adults)</span>
+<span id="cb94-3"><a href="testing-regression-assumptions.html#cb94-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb94-4"><a href="testing-regression-assumptions.html#cb94-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Use the variance inflation factor from the car package</span></span>
+<span id="cb94-5"><a href="testing-regression-assumptions.html#cb94-5" aria-hidden="true" tabindex="-1"></a>car<span class="sc">::</span><span class="fu">vif</span>(BMI3_model)</span></code></pre></div>
+<pre><code>##        Poverty PhysActiveDays         Height 
+##       1.013563       1.001323       1.014225</code></pre>
+<p>All the variance inflation values are fairly close to one, suggesting our model doesn’t have multicollinearity. If an explanatory variable has a high VIF, we usually remove that explanatory variable from our model. However, we need to look at how removing that variable affects the model.</p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="regression-model.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="significance-tests.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

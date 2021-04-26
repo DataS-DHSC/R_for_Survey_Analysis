@@ -1,0 +1,3 @@
+"0","# load data"
+"0","nhanes <- NHANES::NHANESraw"
+"0",""

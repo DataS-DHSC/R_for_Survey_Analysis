@@ -22,10 +22,10 @@ Today we will cover the following topics:
 3. Structure your code with sections (Ctr shift R)
 4. help(x) or "?x" is your friend when trying to understand function x... scroll down to "Examples" in the helper window that pops up
 
-
+# Loading packages and data
 ```{r}
 # load all required packages
-pacman::p_load(dplyr, readr, ggplot2, corrplot, NHANES, survey, broom, lmtest, car)
+pacman::p_load(dplyr, readr, ggplot2, corrplot, NHANES, survey, broom, lmtest, car, knitr)
 ```
 
 ```{r, echo=FALSE, message= FALSE}
@@ -41,6 +41,7 @@ library(survey) # for using survey weights and using versions of functions that 
 library(broom) # for tidying up model outputs
 library(lmtest) # for heteroscedasticity tests
 library(car) # for variance inflation factor function (for multicollinearity)
+library(knitr) # not relevant for this course, but this helps displaying the output from this script in the html format that you can then see in your browser
 ```
 
 
@@ -50,9 +51,11 @@ nhanes <- NHANES::NHANESraw
 
 ```
 
+
 ```{r}
-# inspect data
-head(nhanes)
+# inspect data by calling head() function
+# head(nhanes)
+knitr::kable(head(nhanes),format = 'html')
 
 ```
 

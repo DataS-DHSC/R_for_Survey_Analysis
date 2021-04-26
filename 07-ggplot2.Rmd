@@ -1,13 +1,14 @@
-# Intermediate plotting in R (GGPLOT2)
+# Intermediate plotting in R (ggplot2)
 
-This was hopefully all very straight forward and the code was easy to read. In the R universe new packages are created all the time
-GGPLOT2 is THE data viz package in R
-More customisable ways of plotting - in R people use a package called 'ggplot2' we can add layer, upon layer of extra info and change transparency and colours in a nutshell we have 
+This first bit of plotting was hopefully all pretty straight forward and the code was easy to read? In the R universe new packages are created all the time and ggplot2 is *THE* data viz package in R.  
+
+It allows for more customisable ways of plotting -  we can add layer, upon layer of extra info and change transparency and colours and much, much more. In a nutshell we have:
 
 1. DATA, 
 2. AESTHETICS, 
 3. GEOMETRIES.
 
+If you are interested in finding out more about how graphics are constructed with these three components, have a search around your favourite platform for "Grammar of Graphics" and check out the documentation of the ggplot2 package (https://ggplot2.tidyverse.org/).   
 Let's have a look at what this means in practice.
 
 ## Adding transparency
@@ -17,6 +18,8 @@ Let's have a look at what this means in practice.
 ggplot(data = adults, aes(x = Height, y = Weight)) +
   geom_point(alpha = 0.4)
 
+# explore the warning message
+# sum(is.na(adults$Weight)|is.na(adults$Height))
 ```
 
 ## Adding automatic line of best fit

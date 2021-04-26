@@ -1,0 +1,7 @@
+"0",""
+"0","# Let's keep only adults in for this"
+"0","adults <- nhanes %>% dplyr::filter(Age >= 18)"
+"0",""
+"0","# plot scatter plot"
+"0","plot(x = adults$Height, y = adults$Weight)"
+"0",""

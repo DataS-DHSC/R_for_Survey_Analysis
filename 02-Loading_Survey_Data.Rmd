@@ -1,0 +1,166 @@
+# Loading Survey Data
+
+## Analysing a survey in R
+
+Further Reading: [R for Data Science, Hadley](https://r4ds.had.co.nz/introduction.html). 
+
+## Loading the data
+
+As an example dataset we'll use the CDC [National Health & Nutrition Examination Survey](https://wwwn.cdc.gov/nchs/nhanes/continuousnhanes/default.aspx?BeginYear=2017). It's American, but it's easier to access than the Health Survey for England.
+
+In RStudio create a new project, start a new script, and create a `data/` folder.
+
+Download the [demographic data file](https://wwwn.cdc.gov/nchs/nhanes/search/datapage.aspx?Component=Demographics&CycleBeginYear=2017) and the [Body Measures](https://wwwn.cdc.gov/nchs/nhanes/search/datapage.aspx?Component=Examination&CycleBeginYear=2017) data file to your data folder.
+
+We'll load some libraries and the demographic data:
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+library(haven)
+library(janitor)
+
+# Load demographic data
+nhanes <- read_xpt("data/DEMO_J.XPT")
+
+```
+
+And look at the first few rows:
+
+```{r eval=FALSE, include=TRUE}
+slice_head(nhanes, n=10) %>% 
+  View()
+```
+
+
+```{r}
+slice_head(nhanes, n=10) %>% 
+  DT::datatable()
+
+```
+
+We need the [data dictionary](https://wwwn.cdc.gov/Nchs/Nhanes/2017-2018/DEMO_J.htm) to make sense of this.
+
+## Cleaning the data
+
+Cleaning data is long, and repetitive.
+
+1. best practise: clean it once, share the clean data.  [Example](https://cran.r-project.org/web/packages/stats19/index.html)
+2. good-enough practise: keep the columns you're interested in, clean those.
+
+For 1-off analysis (2) is fair and proportionate. For weekly/monthly stats (1) is better - talk to Data Science team about RAP.
+
+## Exploring the data
+
+We've already explored the data a little with `View`. This is perfectly valid.
+
+Hypothetical scenario - a stakeholder wants to know if targeting weight management services at demographics with lower education levels might improve health inequalities. 
+
+Education level is in the demographics table, BMI is in the examination table. 
+We want education & participant ID from demographics, to join it with BMI & participant ID from examinations.
+
+(Adult) education level is held in column DMDEDUC2. 
+
+```{r}
+# recode Adult education
+
+nhanes <- nhanes %>% 
+  mutate(Education = case_when(
+    DMDEDUC2 == 1 ~ "Less than 9th grade",
+    DMDEDUC2 == 2 ~ "9-11th grade (Includes 12th grade with no diploma)",
+    DMDEDUC2 == 3 ~ "High school graduate/GED or equivalent",
+    DMDEDUC2 == 4 ~ "Some college or AA degree",
+    DMDEDUC2 == 5 ~ "College graduate or above",
+    DMDEDUC2 == 7 ~ "Refused",
+    DMDEDUC2 == 9 ~ "Don't Know"
+  )) %>% 
+  select(ID = SEQN, Education)
+
+nhanes %>% 
+  slice_head(n=10) %>% 
+  DT::datatable()
+```
+
+[data dictionary for examination dataset](https://wwwn.cdc.gov/Nchs/Nhanes/2017-2018/BMX_J.htm)
+
+```{r}
+# Load examination data
+
+exam <- read_xpt("data/BMX_J.XPT") %>% 
+  select(ID = SEQN, BMI = BMXBMI)
+
+exam %>% 
+  slice_head(n = 10) %>% 
+  DT::datatable()
+
+```
+
+Joining them on ID:
+
+[Refresher on joins](https://r4ds.had.co.nz/relational-data.html?q=join#inner-join)
+
+```{r}
+
+nhanes <- left_join(nhanes, exam, by="ID")
+
+nhanes %>% 
+  slice_head(n=10) %>% 
+  DT::datatable(nhanes)
+```
+
+Keeping people with Education level recorded, & valid BMI:
+
+
+```{r}
+
+nhanes %>% 
+  filter(!is.na(Education), !is.na(BMI)) %>% 
+  select(-ID) %>% 
+  group_by(Education) %>% 
+  summarise(average_BMI = mean(BMI)) %>% 
+  knitr::kable()
+  
+
+```
+
+[Refresh on `filter`](https://r4ds.had.co.nz/transform.html?q=filter#filter-rows-with-filter)
+
+
+[Refresh on `select`](https://r4ds.had.co.nz/transform.html?q=filter#select)
+
+
+[Refresh on grouping & summarising](https://r4ds.had.co.nz/transform.html?q=filter#grouped-summaries-with-summarise)
+
+
+No obvious relationship there, but I didn't apply the survey weighting.
+
+## Applying survey weighting for exploratory stats
+
+In reality someone has tidied the NHANES data for R, so I'll load that.
+
+
+```{r}
+rm(exam, nhanes) # We're not using these data any more, we can remove them from memory.
+
+nhanes <- NHANES::NHANESraw
+
+nhanes %>% 
+  slice_head(n=10) %>% 
+  DT::datatable()
+```
+
+The survey weighting is WTMEC2YR, and we can summarise with `weighted.mean`.:
+
+```{r}
+nhanes %>% 
+  filter(!is.na(Education), !is.na(BMI)) %>% 
+  group_by(Education) %>% 
+  summarise(average_BMI = weighted.mean(BMI, WTMEC2YR)) %>% 
+  knitr::kable()
+
+```
+
+
+The manual page for `weighted.mean` can be viewed with `?weighted.mean` or F1 when the cursor is inside `weighted.mean`. 
+
+It looks like there's a distinction between college grads and non-college grads. 
+

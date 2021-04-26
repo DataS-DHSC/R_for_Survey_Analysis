@@ -19,7 +19,8 @@ hist(nhanes$Age[nhanes$Age<10]) # they sampled for both 0-6months and 6-12months
 
 # Great for plotting a statistic (e.g. mean value) for categorical data
 # Get dataframe into right format
-aggregates_by_health <- nhanes %>% dplyr::group_by(HealthGen) %>% 
+aggregates_by_health <- nhanes %>% 
+  dplyr::group_by(HealthGen) %>% 
   dplyr::summarise(count = n(),
             mean_weight = round(mean(Weight, na.rm=T),1),
             mean_age = round(mean(Age, na.rm=T),1))
@@ -90,4 +91,4 @@ coef(lm(hnorm ~ wnorm, data = df_norm))
 Note: For correlation coef, the larger the value, the stronger the (linear!) relationship.
 For regression coefficients, a larger slope coefficient does NOT imply that the association between variables is stronger (remember the unit dependency).
 
-## *Are there any other plots that you regularly use? *
+## Are there any other plots that you regularly use?

@@ -1,0 +1,2 @@
+"0","# inspect data by calling head() function"
+"0","knitr::kable(head(nhanes),format = 'html')"

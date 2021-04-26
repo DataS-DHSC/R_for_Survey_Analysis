@@ -1,0 +1,2 @@
+"0","# load all required packages"
+"0","pacman::p_load(dplyr, readr, ggplot2, corrplot, NHANES, survey, broom, lmtest, car, knitr)"
